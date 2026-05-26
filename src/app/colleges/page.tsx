@@ -68,12 +68,12 @@ function CollegesContent() {
   const collegeTypes = Object.values(CollegeType);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-24">
       <div className="flex flex-col md:flex-row gap-8">
         
         {/* Sidebar Filters (Desktop) */}
-        <div className="hidden md:block w-64 flex-shrink-0 space-y-8 pt-2">
-          <div>
+        <div className="hidden md:block w-64 flex-shrink-0 space-y-8">
+          <div className="sticky top-32">
             <h3 className="font-serif text-2xl font-bold text-slate-900 flex items-center gap-2 mb-6">
               <Filter className="h-5 w-5" /> Filters
             </h3>
@@ -225,9 +225,11 @@ function CollegesContent() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+              <div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 transition-all duration-500 ${loading ? 'opacity-40 scale-[0.98]' : 'opacity-100 scale-100'}`}>
                 {data?.colleges.map((college) => (
-                  <CollegeCard key={college.id} college={college} />
+                  <div key={college.id} className="animate-fade-in">
+                    <CollegeCard college={college} />
+                  </div>
                 ))}
               </div>
 

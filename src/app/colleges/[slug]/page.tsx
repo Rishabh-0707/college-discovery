@@ -146,7 +146,7 @@ export default function CollegeDetailPage() {
           <div className="lg:col-span-2 space-y-8">
             
             {activeTab === 'overview' && (
-              <section className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200/60">
+              <section className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200/60 animate-fade-in">
                 <h2 className="text-2xl font-bold text-slate-900 mb-4">About the College</h2>
                 <div className="prose prose-slate max-w-none text-slate-600 leading-relaxed">
                   {college.description.split('\n').map((paragraph, idx) => (
@@ -166,7 +166,7 @@ export default function CollegeDetailPage() {
             )}
 
             {activeTab === 'courses' && (
-              <section className="space-y-4">
+              <section className="space-y-4 animate-fade-in">
                 {college.courses.map((course) => (
                   <div key={course.id} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200/60 hover:border-indigo-200 transition-colors">
                     <div className="flex justify-between items-start">
@@ -188,7 +188,7 @@ export default function CollegeDetailPage() {
             )}
 
             {activeTab === 'placements' && (
-              <section className="space-y-6">
+              <section className="space-y-6 animate-fade-in">
                 {college.placements.map((placement) => (
                   <div key={placement.id} className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/60">
                     <h3 className="text-xl font-bold text-slate-900 mb-6 border-b pb-4">Placement Statistics ({placement.year})</h3>
@@ -228,7 +228,7 @@ export default function CollegeDetailPage() {
             )}
 
             {activeTab === 'reviews' && (
-              <section className="space-y-6">
+              <section className="space-y-6 animate-fade-in">
                 {college.reviews.map((review) => (
                   <div key={review.id} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200/60">
                     <div className="flex justify-between items-start mb-4">
