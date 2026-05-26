@@ -1,5 +1,14 @@
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Trophy, Users } from 'lucide-react';
+import { ArrowRight, BookOpen, Trophy, Users, Globe, Briefcase, Sparkles } from 'lucide-react';
+
+const features = [
+  { icon: BookOpen, title: "Academic Excellence", desc: "Explore deeply verified data on course structures, faculty, and academic rigor across India's premier institutions." },
+  { icon: Trophy, title: "Verified Placements", desc: "Make informed decisions with transparent, audited placement records, median salaries, and top recruiting metrics." },
+  { icon: Users, title: "Student Life", desc: "Discover the reality of campus life through unfiltered, structured reviews from active students and recent alumni." },
+  { icon: Globe, title: "Global Alumni Network", desc: "Connect with expansive networks of graduates leading top technology and business enterprises worldwide." },
+  { icon: Briefcase, title: "Industry Integration", desc: "Experience real-world partnerships bridging the gap between theoretical learning and practical application." },
+  { icon: Sparkles, title: "Holistic Development", desc: "Evaluate extracurricular opportunities, tech clubs, and startup incubation centers available on campus." }
+];
 
 export default function Home() {
   return (
@@ -63,38 +72,37 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Gray Band Section */}
-      <section className="bg-[#F5F5F5] py-24 border-t border-slate-200">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
-            
-            <div className="flex flex-col">
-              <BookOpen className="h-10 w-10 text-[#E81A2D] mb-6 stroke-[1.5]" />
-              <h3 className="font-serif text-2xl font-medium text-slate-900 mb-4">Academic Excellence</h3>
-              <p className="text-slate-600 leading-relaxed text-lg font-light">
-                Explore deeply verified data on course structures, faculty, and academic rigor across India's premier institutions.
-              </p>
-            </div>
+      {/* Auto-scrolling Marquee Features Section */}
+      <section className="bg-[#F5F5F5] py-24 border-t border-slate-200 overflow-hidden">
+        <div className="mb-12 px-6 lg:px-8 text-center">
+          <h2 className="font-serif text-3xl md:text-4xl font-medium text-slate-900">Why Choose CollegeQ</h2>
+          <div className="h-1 w-12 bg-[#E81A2D] mx-auto mt-4"></div>
+        </div>
 
-            <div className="flex flex-col">
-              <Trophy className="h-10 w-10 text-[#E81A2D] mb-6 stroke-[1.5]" />
-              <h3 className="font-serif text-2xl font-medium text-slate-900 mb-4">Verified Placements</h3>
-              <p className="text-slate-600 leading-relaxed text-lg font-light">
-                Make informed decisions with transparent, audited placement records, median salaries, and top recruiting metrics.
-              </p>
-            </div>
-
-            <div className="flex flex-col">
-              <Users className="h-10 w-10 text-[#E81A2D] mb-6 stroke-[1.5]" />
-              <h3 className="font-serif text-2xl font-medium text-slate-900 mb-4">Student Life</h3>
-              <p className="text-slate-600 leading-relaxed text-lg font-light">
-                Discover the reality of campus life through unfiltered, structured reviews from active students and recent alumni.
-              </p>
-            </div>
-
+        {/* Marquee Wrapper */}
+        <div className="relative flex w-full flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
+          <div className="flex w-max animate-marquee gap-8 pr-8">
+            {/* Map features twice to create the infinite scroll effect seamlessly */}
+            {[...features, ...features].map((feature, i) => {
+              const Icon = feature.icon;
+              return (
+                <div key={i} className="flex flex-col w-[350px] md:w-[400px] shrink-0 bg-white p-8 border border-slate-200 rounded-2xl hover:border-red-200 hover:shadow-xl transition-all duration-300">
+                  <div className="h-12 w-12 rounded-full bg-red-50 flex items-center justify-center mb-6">
+                    <Icon className="h-6 w-6 text-[#E81A2D] stroke-[2]" />
+                  </div>
+                  <h3 className="font-serif text-2xl font-medium text-slate-900 mb-3">{feature.title}</h3>
+                  <p className="text-slate-600 leading-relaxed font-light">
+                    {feature.desc}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
+      
+      {/* Spacer for bottom dock */}
+      <div className="h-24 bg-[#F5F5F5]"></div>
     </div>
   );
 }
