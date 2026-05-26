@@ -1,4 +1,4 @@
-# CollegeDiscover
+# CollegeQ
 
 A premium, full-stack college discovery and comparison platform built with modern web technologies. Designed with an elegant, academic aesthetic inspired by top-tier global universities.
 

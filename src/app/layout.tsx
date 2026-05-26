@@ -17,8 +17,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "College Discover | Academic Excellence",
-  description: "Find what moves you. Start something extraordinary.",
+  title: "CollegeQ | Academic Excellence",
+  description: "Elevate your academic journey and discover extraordinary institutions.",
 };
 
 export default function RootLayout({

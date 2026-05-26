@@ -16,13 +16,11 @@ export default function Navbar() {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           
-          {/* Logo - Red Block Style */}
+          {/* Logo */}
           <Link href="/" className="flex items-center h-full">
-            <div className="bg-[#E81A2D] h-full flex items-center justify-center px-6 lg:px-8">
-              <span className="font-serif text-2xl font-bold text-white tracking-wide">
-                CollegeDiscover
-              </span>
-            </div>
+            <span className="font-serif text-2xl font-bold text-slate-900 tracking-wide">
+              College<span className="text-[#E81A2D]">Q</span>
+            </span>
           </Link>
 
           {/* Desktop Nav */}
