@@ -14,10 +14,10 @@ export default function Navbar() {
   return (
     <>
       {/* Top Logo - Clean and minimal */}
-      <header className="fixed top-0 left-0 w-full z-40 p-6 pointer-events-none">
+      <header className="fixed top-0 left-0 w-full z-40 p-6 md:p-8 pointer-events-none">
         <div className="max-w-[1400px] mx-auto flex justify-between items-center">
-          <Link href="/" className="pointer-events-auto flex items-center bg-white/50 backdrop-blur-md px-4 py-2 rounded-2xl border border-white shadow-sm">
-            <span className="font-serif text-2xl font-bold text-slate-900 tracking-wide">
+          <Link href="/" className="pointer-events-auto flex items-center bg-white/70 backdrop-blur-2xl px-8 py-4 rounded-full border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.05)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.08)] hover:scale-[1.02] transition-all duration-500">
+            <span className="font-serif text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
               College<span className="text-[#E81A2D]">Q</span>
             </span>
           </Link>
@@ -25,7 +25,7 @@ export default function Navbar() {
           {/* Mobile Toggle Button */}
           <button 
             onClick={() => setMobileOpen(!mobileOpen)} 
-            className="md:hidden pointer-events-auto p-3 bg-white/70 backdrop-blur-xl border border-white shadow-lg rounded-full text-slate-800"
+            className="md:hidden pointer-events-auto p-4 bg-white/70 backdrop-blur-2xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.05)] rounded-full text-slate-800 hover:scale-105 transition-all"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
