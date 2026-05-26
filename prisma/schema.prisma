@@ -1,0 +1,162 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  passwordHash  String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  savedColleges   SavedCollege[]
+  savedComparisons SavedComparison[]
+  reviews         Review[]
+
+  @@map("users")
+}
+
+model College {
+  id             String   @id @default(cuid())
+  name           String
+  slug           String   @unique
+  location       String
+  state          String
+  type           CollegeType
+  feesMin        Int
+  feesMax        Int
+  rating         Float
+  totalReviews   Int      @default(0)
+  established    Int
+  description    String   @db.Text
+  imageUrl       String?
+  accreditation  String?
+  website        String?
+  examAccepted   String[]
+  rankMin        Int?
+  rankMax        Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  courses          Course[]
+  placements       Placement[]
+  reviews          Review[]
+  savedByUsers     SavedCollege[]
+  comparisonSlots  ComparisonSlot[]
+  examCutoffs      ExamCutoff[]
+
+  @@map("colleges")
+}
+
+model Course {
+  id          String  @id @default(cuid())
+  collegeId   String
+  name        String
+  degree      String
+  duration    Int     // in years
+  feesPerYear Int
+  totalSeats  Int
+
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@map("courses")
+}
+
+model Placement {
+  id               String @id @default(cuid())
+  collegeId        String
+  year             Int
+  avgPackage       Int    // in LPA (lakhs per annum)
+  highestPackage   Int
+  placementRate    Float  // percentage
+  topCompanies     String[]
+  medianPackage    Int
+
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@map("placements")
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  collegeId   String
+  userId      String
+  rating      Float
+  title       String
+  content     String   @db.Text
+  category    String   // academics, placements, campus, faculty
+  helpfulCount Int     @default(0)
+  createdAt   DateTime @default(now())
+
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+model ExamCutoff {
+  id        String @id @default(cuid())
+  collegeId String
+  examName  String
+  rankMin   Int
+  rankMax   Int
+  category  String @default("General")
+  year      Int
+
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@map("exam_cutoffs")
+}
+
+model SavedCollege {
+  id        String   @id @default(cuid())
+  userId    String
+  collegeId String
+  savedAt   DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, collegeId])
+  @@map("saved_colleges")
+}
+
+model SavedComparison {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  savedAt   DateTime @default(now())
+
+  user  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slots ComparisonSlot[]
+
+  @@map("saved_comparisons")
+}
+
+model ComparisonSlot {
+  id           String @id @default(cuid())
+  comparisonId String
+  collegeId    String
+  position     Int
+
+  comparison SavedComparison @relation(fields: [comparisonId], references: [id], onDelete: Cascade)
+  college    College         @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@map("comparison_slots")
+}
+
+enum CollegeType {
+  IIT
+  NIT
+  IIIT
+  BITS
+  GOVERNMENT
+  PRIVATE
+  DEEMED
+}
