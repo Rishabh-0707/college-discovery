@@ -72,37 +72,37 @@ function CollegesContent() {
       <div className="flex flex-col md:flex-row gap-8">
         
         {/* Sidebar Filters (Desktop) */}
-        <div className="hidden md:block w-64 flex-shrink-0 space-y-6">
+        <div className="hidden md:block w-64 flex-shrink-0 space-y-8 pt-2">
           <div>
-            <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-2 mb-3">
-              <Filter className="h-4 w-4" /> Filters
+            <h3 className="font-serif text-2xl font-bold text-slate-900 flex items-center gap-2 mb-6">
+              <Filter className="h-5 w-5" /> Filters
             </h3>
             
             <div className="space-y-4">
               {/* Institution Type */}
               <div>
-                <label className="text-xs font-medium text-slate-500 uppercase mb-2 block">Institution Type</label>
-                <div className="space-y-2">
-                  <label className="flex items-center gap-2 cursor-pointer">
+                <label className="text-xs font-bold text-slate-400 tracking-widest uppercase mb-4 block">Institution Type</label>
+                <div className="space-y-3">
+                  <label className="flex items-center gap-3 cursor-pointer">
                     <input 
                       type="radio" 
                       name="type" 
                       checked={filters.type === ''}
                       onChange={() => handleFilterChange('type', '')}
-                      className="text-indigo-600 focus:ring-indigo-600"
+                      className="text-[#E81A2D] focus:ring-[#E81A2D] h-4 w-4"
                     />
-                    <span className="text-sm text-slate-700">All Types</span>
+                    <span className="text-sm font-medium text-slate-700">All Types</span>
                   </label>
                   {collegeTypes.map((type) => (
-                    <label key={type} className="flex items-center gap-2 cursor-pointer">
+                    <label key={type} className="flex items-center gap-3 cursor-pointer group">
                       <input 
                         type="radio" 
                         name="type" 
                         checked={filters.type === type}
                         onChange={() => handleFilterChange('type', type)}
-                        className="text-indigo-600 focus:ring-indigo-600"
+                        className="text-[#E81A2D] focus:ring-[#E81A2D] h-4 w-4"
                       />
-                      <span className="text-sm text-slate-700">{type}</span>
+                      <span className="text-sm font-medium text-slate-600 group-hover:text-slate-900 transition-colors">{type}</span>
                     </label>
                   ))}
                 </div>
@@ -117,36 +117,36 @@ function CollegesContent() {
             <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={() => setShowMobileFilters(false)} />
             <div className="relative ml-auto h-full w-full max-w-xs bg-white p-6 shadow-xl">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold">Filters</h2>
-                <button onClick={() => setShowMobileFilters(false)} className="p-2 text-slate-500 hover:bg-slate-100 rounded-lg">
+                <h2 className="font-serif text-xl font-bold">Filters</h2>
+                <button onClick={() => setShowMobileFilters(false)} className="p-2 text-slate-500 hover:bg-slate-100 rounded-none">
                   <X className="h-5 w-5" />
                 </button>
               </div>
               <div className="space-y-4">
                 {/* Institution Type */}
                 <div>
-                  <label className="text-xs font-medium text-slate-500 uppercase mb-2 block">Institution Type</label>
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 cursor-pointer">
+                  <label className="text-xs font-bold text-slate-400 tracking-widest uppercase mb-3 block">Institution Type</label>
+                  <div className="space-y-3">
+                    <label className="flex items-center gap-3 cursor-pointer">
                       <input 
                         type="radio" 
                         name="mobile-type" 
                         checked={filters.type === ''}
                         onChange={() => handleFilterChange('type', '')}
-                        className="text-indigo-600 focus:ring-indigo-600"
+                        className="text-[#E81A2D] focus:ring-[#E81A2D] h-4 w-4"
                       />
-                      <span className="text-sm text-slate-700">All Types</span>
+                      <span className="text-sm font-medium text-slate-700">All Types</span>
                     </label>
                     {collegeTypes.map((type) => (
-                      <label key={type} className="flex items-center gap-2 cursor-pointer">
+                      <label key={type} className="flex items-center gap-3 cursor-pointer group">
                         <input 
                           type="radio" 
                           name="mobile-type" 
                           checked={filters.type === type}
                           onChange={() => handleFilterChange('type', type)}
-                          className="text-indigo-600 focus:ring-indigo-600"
+                          className="text-[#E81A2D] focus:ring-[#E81A2D] h-4 w-4"
                         />
-                        <span className="text-sm text-slate-700">{type}</span>
+                        <span className="text-sm font-medium text-slate-600 group-hover:text-slate-900 transition-colors">{type}</span>
                       </label>
                     ))}
                   </div>
@@ -161,20 +161,20 @@ function CollegesContent() {
           {/* Top Bar */}
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search colleges by name, location, state..."
                 value={filters.search}
                 onChange={handleSearchChange}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow shadow-sm"
+                className="w-full pl-12 pr-4 py-3 rounded-none border border-slate-200 bg-white text-sm focus:outline-none focus:ring-1 focus:ring-[#E81A2D] focus:border-[#E81A2D] transition-shadow shadow-sm"
               />
             </div>
             
             <div className="flex gap-2">
               <button 
                 onClick={() => setShowMobileFilters(true)}
-                className="md:hidden flex items-center justify-center p-2.5 border border-slate-200 rounded-xl bg-white text-slate-600 hover:bg-slate-50"
+                className="md:hidden flex items-center justify-center p-3 border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
               >
                 <SlidersHorizontal className="h-5 w-5" />
               </button>
@@ -185,7 +185,7 @@ function CollegesContent() {
                   const [sortBy, sortOrder] = e.target.value.split('-');
                   setFilters((prev) => ({ ...prev, sortBy: sortBy as any, sortOrder: sortOrder as any, page: 1 }));
                 }}
-                className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
+                className="px-4 py-3 rounded-none border border-slate-200 bg-white text-sm font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#E81A2D] focus:border-[#E81A2D] shadow-sm"
               >
                 <option value="rating-desc">Highest Rated</option>
                 <option value="feesMin-asc">Lowest Fees</option>
@@ -196,7 +196,7 @@ function CollegesContent() {
           </div>
 
           {/* Results Info */}
-          <div className="mb-4 text-sm text-slate-500">
+          <div className="mb-4 text-sm font-medium text-slate-500 uppercase tracking-wider">
             {data ? (
               <span>Showing {data.colleges.length} of {data.total} colleges</span>
             ) : (
@@ -208,24 +208,24 @@ function CollegesContent() {
           {loading && !data ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-[360px] rounded-2xl bg-slate-200 animate-pulse" />
+                <div key={i} className="h-[360px] bg-slate-100 border border-slate-200 animate-pulse" />
               ))}
             </div>
           ) : data?.colleges.length === 0 ? (
-            <div className="text-center py-24 bg-white rounded-2xl border border-slate-200 border-dashed">
-              <Search className="mx-auto h-12 w-12 text-slate-300 mb-4" />
-              <h3 className="text-lg font-medium text-slate-900">No colleges found</h3>
-              <p className="text-slate-500 mt-1">Try adjusting your search or filters.</p>
+            <div className="text-center py-32 bg-[#FAFAFA] border border-slate-200 border-dashed">
+              <Search className="mx-auto h-12 w-12 text-slate-300 mb-6" />
+              <h3 className="font-serif text-2xl font-bold text-slate-900">No colleges found</h3>
+              <p className="text-slate-500 mt-2 text-lg">Try adjusting your search or filters.</p>
               <button 
                 onClick={() => setFilters({ search: '', page: 1 })}
-                className="mt-4 text-indigo-600 font-medium hover:text-indigo-700"
+                className="mt-6 text-[#E81A2D] font-bold uppercase tracking-widest text-sm hover:underline"
               >
                 Clear all filters
               </button>
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {data?.colleges.map((college) => (
                   <CollegeCard key={college.id} college={college} />
                 ))}
@@ -233,21 +233,21 @@ function CollegesContent() {
 
               {/* Pagination */}
               {data && data.totalPages > 1 && (
-                <div className="mt-10 flex items-center justify-center gap-2">
+                <div className="mt-16 flex items-center justify-center gap-2">
                   <button
                     disabled={filters.page === 1}
                     onClick={() => setFilters((p) => ({ ...p, page: (p.page || 1) - 1 }))}
-                    className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="p-3 border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:text-[#E81A2D] hover:border-slate-300"
                   >
                     <ChevronLeft className="h-5 w-5" />
                   </button>
-                  <span className="text-sm font-medium text-slate-700 px-4">
+                  <span className="text-sm font-bold text-slate-700 px-6 uppercase tracking-widest">
                     Page {data.page} of {data.totalPages}
                   </span>
                   <button
                     disabled={filters.page === data.totalPages}
                     onClick={() => setFilters((p) => ({ ...p, page: (p.page || 1) + 1 }))}
-                    className="p-2 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="p-3 border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:text-[#E81A2D] hover:border-slate-300"
                   >
                     <ChevronRight className="h-5 w-5" />
                   </button>

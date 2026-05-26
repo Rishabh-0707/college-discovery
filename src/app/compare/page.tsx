@@ -40,14 +40,14 @@ export default function ComparePage() {
 
   if (storeColleges.length < 2) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-24 text-center">
-        <div className="bg-indigo-50 text-indigo-600 rounded-2xl p-8 border border-indigo-100 mb-8">
-          <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
-          <h2 className="text-2xl font-bold mb-2">Not Enough Colleges</h2>
-          <p className="text-indigo-800/70 mb-6">You need to select at least 2 colleges to compare them.</p>
+      <div className="mx-auto max-w-3xl px-4 py-32 text-center">
+        <div className="bg-[#FAFAFA] text-slate-800 p-12 border border-slate-200 mb-8 flex flex-col items-center">
+          <AlertCircle className="h-12 w-12 text-slate-300 mb-6" />
+          <h2 className="font-serif text-3xl font-medium mb-3">Not Enough Colleges</h2>
+          <p className="text-slate-500 mb-8 text-lg">You need to select at least 2 colleges to compare them.</p>
           <div className="flex justify-center gap-4">
             {storeColleges.length === 1 && (
-              <div className="bg-white px-4 py-2 rounded-lg border border-indigo-200 shadow-sm text-sm font-medium">
+              <div className="bg-white px-5 py-2.5 border border-slate-200 shadow-sm text-sm font-medium text-slate-700">
                 1 Selected: {storeColleges[0].name}
               </div>
             )}
@@ -55,7 +55,7 @@ export default function ComparePage() {
         </div>
         <Link 
           href="/colleges" 
-          className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold shadow-md hover:bg-indigo-700 transition-colors"
+          className="inline-flex items-center gap-2 bg-[#E81A2D] text-white px-8 py-4 font-bold uppercase tracking-widest text-sm hover:bg-[#c91525] transition-colors shadow-lg shadow-red-500/20"
         >
           <Plus className="h-5 w-5" /> Add More Colleges
         </Link>
@@ -63,18 +63,18 @@ export default function ComparePage() {
     );
   }
 
-  if (loading) return <div className="text-center py-24">Loading comparison data...</div>;
+  if (loading) return <div className="text-center py-32 font-serif text-2xl text-slate-500">Loading comparison data...</div>;
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <div className="flex items-center justify-between mb-8">
+    <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 py-12">
+      <div className="flex items-center justify-between mb-12">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Compare Colleges</h1>
-          <p className="text-slate-500 mt-1">Side-by-side comparison of your selected institutions.</p>
+          <h1 className="font-serif text-4xl font-medium text-slate-900">Compare Colleges</h1>
+          <p className="text-slate-500 mt-2 text-lg">Side-by-side comparison of your selected institutions.</p>
         </div>
         <button 
           onClick={clearAll}
-          className="text-red-600 hover:text-red-700 font-medium text-sm hover:underline"
+          className="text-red-600 hover:text-red-700 font-medium text-sm hover:underline tracking-wide"
         >
           Clear All
         </button>
@@ -87,33 +87,33 @@ export default function ComparePage() {
               <th className="w-48 p-4 align-top"></th>
               {data.map((college) => (
                 <th key={college.id} className="w-1/3 p-4 align-top">
-                  <div className="bg-white rounded-xl border border-slate-200 p-4 relative shadow-sm h-full">
+                  <div className="bg-white border border-slate-200 p-6 relative h-full hover:shadow-xl transition-shadow">
                     <button 
                       onClick={() => removeCollege(college.id)}
-                      className="absolute -top-2 -right-2 bg-white text-slate-400 hover:text-red-500 rounded-full p-1 border border-slate-200 shadow-sm"
+                      className="absolute -top-3 -right-3 bg-white text-slate-400 hover:text-red-500 rounded-full p-1.5 border border-slate-200 shadow-sm hover:border-red-200 transition-colors"
                     >
                       <X className="h-4 w-4" />
                     </button>
-                    <div className="h-12 flex items-center mb-4">
-                      <h3 className="font-bold text-lg text-slate-900 leading-tight">{college.name}</h3>
+                    <div className="h-16 flex flex-col justify-end mb-4">
+                      <h3 className="font-serif font-bold text-xl text-slate-900 leading-tight line-clamp-2">{college.name}</h3>
                     </div>
-                    <span className="inline-block px-2 py-1 bg-slate-100 rounded text-xs font-medium text-slate-600 mb-2">
+                    <span className="inline-block px-2.5 py-1 bg-slate-50 border border-slate-100 text-[10px] font-bold tracking-widest uppercase text-slate-600 mb-4">
                       {college.type}
                     </span>
                     <Link 
                       href={`/colleges/${college.slug}`}
-                      className="mt-2 text-indigo-600 text-sm font-medium flex items-center gap-1 hover:underline"
+                      className="block mt-2 text-[#E81A2D] text-sm font-semibold flex items-center gap-1.5 hover:underline"
                     >
-                      View Details <ArrowRight className="h-3 w-3" />
+                      View Details <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
                   </div>
                 </th>
               ))}
               {data.length < 3 && (
                 <th className="w-1/3 p-4 align-top">
-                  <Link href="/colleges" className="flex flex-col items-center justify-center h-full min-h-[160px] rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 text-slate-500 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 transition-colors">
-                    <Plus className="h-8 w-8 mb-2" />
-                    <span className="font-medium text-sm">Add College</span>
+                  <Link href="/colleges" className="flex flex-col items-center justify-center h-full min-h-[220px] border-2 border-dashed border-slate-200 bg-[#FAFAFA] text-slate-400 hover:text-[#E81A2D] hover:border-[#E81A2D] hover:bg-red-50/50 transition-colors">
+                    <Plus className="h-8 w-8 mb-3" />
+                    <span className="font-bold text-sm uppercase tracking-widest">Add College</span>
                   </Link>
                 </th>
               )}
