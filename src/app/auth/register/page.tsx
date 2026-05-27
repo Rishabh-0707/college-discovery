@@ -36,16 +36,19 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100">
+    <div className="flex min-h-[calc(100vh-5rem)] items-center justify-center py-24 px-4 sm:px-6 lg:px-8 bg-[#FAFAFA]">
+      <div className="w-full max-w-md space-y-8 bg-white p-8 md:p-12 shadow-2xl border border-slate-200">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-slate-900">
-            Create an account
+          <div className="h-12 w-12 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-6">
+            <span className="font-serif text-xl font-bold text-[#E81A2D]">Q</span>
+          </div>
+          <h2 className="text-center text-3xl font-serif font-medium text-slate-900">
+            Join CollegeQ
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm text-center">
+            <div className="bg-red-50 border border-red-200 text-[#E81A2D] p-4 text-sm text-center font-medium">
               {error}
             </div>
           )}
@@ -57,7 +60,7 @@ export default function RegisterPage() {
                 required
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="relative block w-full rounded-xl border-0 py-3 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="relative block w-full border border-slate-200 bg-[#FAFAFA] px-4 py-4 text-slate-900 placeholder:text-slate-400 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#E81A2D] focus:border-[#E81A2D] sm:text-sm transition-all"
                 placeholder="Full Name"
               />
             </div>
@@ -68,7 +71,7 @@ export default function RegisterPage() {
                 required
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="relative block w-full rounded-xl border-0 py-3 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="relative block w-full border border-slate-200 bg-[#FAFAFA] px-4 py-4 text-slate-900 placeholder:text-slate-400 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#E81A2D] focus:border-[#E81A2D] sm:text-sm transition-all"
                 placeholder="Email address"
               />
             </div>
@@ -79,7 +82,7 @@ export default function RegisterPage() {
                 required
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="relative block w-full rounded-xl border-0 py-3 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="relative block w-full border border-slate-200 bg-[#FAFAFA] px-4 py-4 text-slate-900 placeholder:text-slate-400 focus:z-10 focus:outline-none focus:ring-1 focus:ring-[#E81A2D] focus:border-[#E81A2D] sm:text-sm transition-all"
                 placeholder="Password (min 6 characters)"
               />
             </div>
@@ -89,15 +92,15 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative flex w-full justify-center rounded-xl bg-indigo-600 px-3 py-3 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 transition-colors"
+              className="group relative flex w-full justify-center bg-[#E81A2D] px-8 py-4 text-sm font-bold uppercase tracking-widest text-white hover:bg-[#c91525] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E81A2D] disabled:opacity-50 transition-colors shadow-lg shadow-red-500/20"
             >
-              {loading ? 'Creating account...' : 'Sign up'}
+              {loading ? 'Creating account...' : 'Create Account'}
             </button>
           </div>
           
-          <div className="text-center text-sm text-slate-600">
+          <div className="text-center text-sm text-slate-600 mt-8 pt-6 border-t border-slate-100">
             Already have an account?{' '}
-            <Link href="/auth/login" className="font-semibold text-indigo-600 hover:text-indigo-500">
+            <Link href="/auth/login" className="font-bold uppercase tracking-widest text-xs text-[#E81A2D] hover:underline ml-2">
               Sign in
             </Link>
           </div>
