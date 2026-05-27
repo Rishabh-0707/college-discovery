@@ -33,38 +33,37 @@ export default function SavedCollegesPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+      <div className="flex items-center justify-center min-h-[calc(100vh-5rem)]">
+        <Loader2 className="h-10 w-10 animate-spin text-[#E81A2D]" />
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <div className="flex items-center gap-3 mb-8">
-        <div className="h-12 w-12 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600">
-          <Bookmark className="h-6 w-6" />
+    <div className="mx-auto max-w-7xl px-4 pt-32 pb-32 sm:px-6 lg:px-8">
+      <div className="flex flex-col items-center text-center mb-16">
+        <div className="h-16 w-16 rounded-full bg-red-50 flex items-center justify-center mb-6">
+          <Bookmark className="h-7 w-7 text-[#E81A2D] stroke-[2]" />
         </div>
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">Saved Colleges</h1>
-          <p className="text-slate-500 mt-1">Colleges you've bookmarked for later.</p>
-        </div>
+        <h1 className="text-4xl md:text-5xl font-serif font-medium text-slate-900 mb-4">Saved Collections</h1>
+        <p className="text-slate-500 text-lg">Your curated list of prospective institutions.</p>
+        <div className="h-1 w-12 bg-[#E81A2D] mx-auto mt-8"></div>
       </div>
 
       {saved.length === 0 ? (
-        <div className="text-center py-24 bg-white rounded-2xl border border-slate-200 border-dashed">
-          <Bookmark className="mx-auto h-12 w-12 text-slate-300 mb-4" />
-          <h3 className="text-lg font-medium text-slate-900">No saved colleges yet</h3>
-          <p className="text-slate-500 mt-1">Start exploring and save colleges you are interested in.</p>
+        <div className="text-center py-24 bg-[#FAFAFA] border border-slate-200 border-dashed animate-fade-in">
+          <Bookmark className="mx-auto h-12 w-12 text-slate-300 mb-6 stroke-[1.5]" />
+          <h3 className="font-serif text-2xl font-medium text-slate-900">No saved colleges yet</h3>
+          <p className="text-slate-500 mt-2 mb-8">Start exploring and save colleges you are interested in building your future with.</p>
           <Link 
             href="/colleges"
-            className="mt-6 inline-block bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-indigo-700 transition-colors"
+            className="inline-block bg-[#E81A2D] text-white px-8 py-4 text-sm font-bold uppercase tracking-widest hover:bg-[#c91525] transition-colors shadow-lg shadow-red-500/20"
           >
-            Explore Colleges
+            Explore Institutions
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
           {saved.map((item) => (
             <CollegeCard key={item.collegeId} college={item.college} />
           ))}
