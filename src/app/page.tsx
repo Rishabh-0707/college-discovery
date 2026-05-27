@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { ArrowRight, BookOpen, Trophy, Users, Globe, Briefcase, Sparkles } from 'lucide-react';
 
 const features = [
@@ -10,6 +13,22 @@ const features = [
   { icon: Sparkles, title: "Holistic Development", desc: "Evaluate extracurricular opportunities, tech clubs, and startup incubation centers available on campus." }
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.1,
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30, filter: 'blur(10px)' },
+  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+};
+
 export default function Home() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-5rem)]">
@@ -20,22 +39,27 @@ export default function Home() {
           <div className="flex flex-col lg:flex-row items-center gap-16">
             
             {/* Left Content Area */}
-            <div className="w-full lg:w-[50%] z-10">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 mb-8">
+            <motion.div 
+              className="w-full lg:w-[50%] z-10"
+              variants={containerVariants}
+              initial="hidden"
+              animate="show"
+            >
+              <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 mb-8">
                 <span className="h-2 w-2 rounded-full bg-[#E81A2D] animate-pulse"></span>
                 <span className="text-xs font-semibold uppercase tracking-widest text-slate-600">The New Standard</span>
-              </div>
+              </motion.div>
               
-              <h1 className="text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-slate-900 tracking-tight text-balance mb-6">
+              <motion.h1 variants={itemVariants} className="text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-slate-900 tracking-tight text-balance mb-6">
                 <span className="font-sans font-bold block mb-1">Elevate your</span>
                 <span className="font-serif italic text-[#E81A2D] block mb-2">academic journey.</span>
-              </h1>
+              </motion.h1>
               
-              <p className="text-lg text-slate-600 mb-10 max-w-lg leading-relaxed">
+              <motion.p variants={itemVariants} className="text-lg text-slate-600 mb-10 max-w-lg leading-relaxed">
                 Experience a premium curation of India's finest engineering institutions. Uncover verified placements, authentic student reviews, and powerful data-driven insights.
-              </p>
+              </motion.p>
               
-              <div className="flex items-center gap-6">
+              <motion.div variants={itemVariants} className="flex items-center gap-6">
                 <Link 
                   href="/colleges" 
                   className="bg-[#E81A2D] text-white px-8 py-4 text-sm font-bold uppercase tracking-widest hover:bg-[#c91525] transition-colors shadow-lg shadow-red-500/20"
@@ -48,12 +72,17 @@ export default function Home() {
                 >
                   Compare Metrics
                 </Link>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* Right Image Area with Modern Arch Design */}
             <div className="w-full lg:w-[50%] relative">
-              <div className="relative w-full aspect-[4/5] lg:aspect-square max-w-lg mx-auto">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95, filter: 'blur(20px)' }}
+                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                className="relative w-full aspect-[4/5] lg:aspect-square max-w-lg mx-auto"
+              >
                 <img 
                   src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop" 
                   alt="Classic University Architecture" 
@@ -61,11 +90,16 @@ export default function Home() {
                 />
                 
                 {/* Floating Stat Card */}
-                <div className="absolute -bottom-8 -left-8 bg-white p-6 shadow-xl border border-slate-100 rounded-xl hidden md:block">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20, rotate: -5 }}
+                  animate={{ opacity: 1, y: 0, rotate: 0 }}
+                  transition={{ duration: 0.8, ease: "easeOut", delay: 1 }}
+                  className="absolute -bottom-8 -left-8 bg-white p-6 shadow-xl border border-slate-100 rounded-xl hidden md:block"
+                >
                   <p className="text-3xl font-serif font-bold text-slate-900">500+</p>
                   <p className="text-xs uppercase tracking-widest text-slate-500 font-semibold mt-1">Verified Institutions</p>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             </div>
             
           </div>
@@ -74,13 +108,25 @@ export default function Home() {
 
       {/* Auto-scrolling Marquee Features Section */}
       <section className="bg-[#F5F5F5] py-24 border-t border-slate-200 overflow-hidden">
-        <div className="mb-12 px-6 lg:px-8 text-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-12 px-6 lg:px-8 text-center"
+        >
           <h2 className="font-serif text-3xl md:text-4xl font-medium text-slate-900">Why Choose CollegeQ</h2>
           <div className="h-1 w-12 bg-[#E81A2D] mx-auto mt-4"></div>
-        </div>
+        </motion.div>
 
         {/* Marquee Wrapper */}
-        <div className="relative flex w-full flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
+        <motion.div 
+          initial={{ opacity: 0, filter: 'blur(10px)' }}
+          whileInView={{ opacity: 1, filter: 'blur(0px)' }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 1, delay: 0.2 }}
+          className="relative flex w-full flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]"
+        >
           <div className="flex w-max animate-marquee gap-8 pr-8">
             {/* Map features twice to create the infinite scroll effect seamlessly */}
             {[...features, ...features].map((feature, i) => {
@@ -98,7 +144,7 @@ export default function Home() {
               );
             })}
           </div>
-        </div>
+        </motion.div>
       </section>
       
       {/* Spacer for bottom dock */}
