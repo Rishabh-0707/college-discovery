@@ -18,15 +18,15 @@ const containerVariants = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
+      staggerChildren: 0.15,
       delayChildren: 0.1,
     }
   }
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30, filter: 'blur(10px)' },
-  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+  hidden: { opacity: 0, y: 20, filter: 'blur(4px)' },
+  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 1, ease: [0.22, 1, 0.36, 1] } }
 };
 
 export default function Home() {
@@ -78,9 +78,9 @@ export default function Home() {
             {/* Right Image Area with Modern Arch Design */}
             <div className="w-full lg:w-[50%] relative">
               <motion.div 
-                initial={{ opacity: 0, scale: 0.95, filter: 'blur(20px)' }}
+                initial={{ opacity: 0, scale: 0.98, filter: 'blur(8px)' }}
                 animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
                 className="relative w-full aspect-[4/5] lg:aspect-square max-w-lg mx-auto"
               >
                 <img 
@@ -91,9 +91,9 @@ export default function Home() {
                 
                 {/* Floating Stat Card */}
                 <motion.div 
-                  initial={{ opacity: 0, y: 20, rotate: -5 }}
+                  initial={{ opacity: 0, y: 10, rotate: -2 }}
                   animate={{ opacity: 1, y: 0, rotate: 0 }}
-                  transition={{ duration: 0.8, ease: "easeOut", delay: 1 }}
+                  transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
                   className="absolute -bottom-8 -left-8 bg-white p-6 shadow-xl border border-slate-100 rounded-xl hidden md:block"
                 >
                   <p className="text-3xl font-serif font-bold text-slate-900">500+</p>
@@ -109,10 +109,10 @@ export default function Home() {
       {/* Auto-scrolling Marquee Features Section */}
       <section className="bg-[#F5F5F5] py-24 border-t border-slate-200 overflow-hidden">
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           className="mb-12 px-6 lg:px-8 text-center"
         >
           <h2 className="font-serif text-3xl md:text-4xl font-medium text-slate-900">Why Choose CollegeQ</h2>
@@ -121,10 +121,10 @@ export default function Home() {
 
         {/* Marquee Wrapper */}
         <motion.div 
-          initial={{ opacity: 0, filter: 'blur(10px)' }}
+          initial={{ opacity: 0, filter: 'blur(4px)' }}
           whileInView={{ opacity: 1, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1, delay: 0.2 }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
           className="relative flex w-full flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]"
         >
           <div className="flex w-max animate-marquee gap-8 pr-8">
