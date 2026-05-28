@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -37,6 +38,14 @@ export default function RegisterPage() {
 
   return (
     <div className="flex min-h-[calc(100vh-5rem)] items-center justify-center py-24 px-4 sm:px-6 lg:px-8 bg-[#FAFAFA]">
+      {/* Back Button */}
+      <button
+        onClick={() => router.back()}
+        className="absolute top-24 left-6 inline-flex items-center gap-2 text-slate-500 hover:text-[#E81A2D] transition-colors text-sm font-medium"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back
+      </button>
       <div className="w-full max-w-md space-y-8 bg-white p-8 md:p-12 shadow-2xl border border-slate-200">
         <div>
           <div className="h-12 w-12 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-6">

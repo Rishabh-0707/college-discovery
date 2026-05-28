@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CollegesResponse, CollegeFilters, CollegeType } from '@/types';
 import CollegeCard from '@/components/CollegeCard';
-import { Search, Filter, SlidersHorizontal, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Search, Filter, SlidersHorizontal, ChevronLeft, ChevronRight, X, ArrowLeft } from 'lucide-react';
 import { debounce } from '@/lib/utils';
 
 function CollegesContent() {
@@ -69,6 +69,14 @@ function CollegesContent() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-24">
+      {/* Back Button */}
+      <button
+        onClick={() => router.back()}
+        className="inline-flex items-center gap-2 text-slate-500 hover:text-[#E81A2D] transition-colors mb-8 text-sm font-medium"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back
+      </button>
       <div className="flex flex-col md:flex-row gap-8">
         
         {/* Sidebar Filters (Desktop) */}

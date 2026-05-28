@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react';
 import { useCompareStore } from '@/store/useCompareStore';
 import { CollegeDetail } from '@/types';
 import { formatFees, formatPackage } from '@/lib/utils';
-import { X, Plus, AlertCircle, ArrowRight } from 'lucide-react';
+import { X, Plus, AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function ComparePage() {
+  const router = useRouter();
   const { colleges: storeColleges, removeCollege, clearAll } = useCompareStore();
   const [data, setData] = useState<CollegeDetail[]>([]);
   const [loading, setLoading] = useState(true);
@@ -67,6 +69,14 @@ export default function ComparePage() {
 
   return (
     <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 py-12">
+      {/* Back Button */}
+      <button
+        onClick={() => router.back()}
+        className="inline-flex items-center gap-2 text-slate-500 hover:text-[#E81A2D] transition-colors mb-8 text-sm font-medium"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back
+      </button>
       <div className="flex items-center justify-between mb-12">
         <div>
           <h1 className="font-serif text-4xl font-medium text-slate-900">Compare Colleges</h1>

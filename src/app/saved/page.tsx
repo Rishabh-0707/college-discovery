@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { SavedCollegeResponse } from '@/types';
 import CollegeCard from '@/components/CollegeCard';
-import { Bookmark, Loader2 } from 'lucide-react';
+import { Bookmark, Loader2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 export default function SavedCollegesPage() {
@@ -41,6 +41,14 @@ export default function SavedCollegesPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-32 pb-32 sm:px-6 lg:px-8">
+      {/* Back Button */}
+      <button
+        onClick={() => router.back()}
+        className="inline-flex items-center gap-2 text-slate-500 hover:text-[#E81A2D] transition-colors mb-8 text-sm font-medium"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back
+      </button>
       <div className="flex flex-col items-center text-center mb-16">
         <div className="h-16 w-16 rounded-full bg-red-50 flex items-center justify-center mb-6">
           <Bookmark className="h-7 w-7 text-[#E81A2D] stroke-[2]" />

@@ -1,14 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+
 import { CollegeDetail } from '@/types';
+import { usePathname, useRouter } from 'next/navigation';
+
 import { formatFees, formatPackage } from '@/lib/utils';
-import { Star, MapPin, Building2, Globe, CheckCircle2, Bookmark, BookmarkCheck } from 'lucide-react';
+import { ArrowLeft, Star, MapPin, Building2, Globe, CheckCircle2, Bookmark, BookmarkCheck } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 
 export default function CollegeDetailPage() {
-  const params = useParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const slug = (pathname.split('/').pop() ?? '');
   const { data: session } = useSession();
   const [college, setCollege] = useState<CollegeDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -18,7 +22,7 @@ export default function CollegeDetailPage() {
   useEffect(() => {
     const fetchCollege = async () => {
       try {
-        const res = await fetch(`/api/colleges/${params.slug}`);
+        const res = await fetch(`/api/colleges/${slug}`);
         if (!res.ok) throw new Error('Not found');
         const data = await res.json();
         setCollege(data);
@@ -30,7 +34,7 @@ export default function CollegeDetailPage() {
       }
     };
     fetchCollege();
-  }, [params.slug]);
+  }, [slug]);
 
   const handleSaveToggle = async () => {
     if (!session) return alert('Please sign in to save colleges');
@@ -62,6 +66,11 @@ export default function CollegeDetailPage() {
     <div className="pb-16">
       {/* Header Banner */}
       <div className="relative h-[300px] w-full bg-slate-900">
+          {/* Back button */}
+          <button onClick={() => router.back()} className="absolute top-4 left-4 flex items-center gap-2 text-white hover:text-[#E81A2D] transition-colors">
+            <ArrowLeft className="h-5 w-5" />
+            <span className="font-medium text-sm">Back</span>
+          </button>
         {college.imageUrl ? (
           <img src={college.imageUrl} alt={college.name} className="h-full w-full object-cover opacity-60" />
         ) : (
