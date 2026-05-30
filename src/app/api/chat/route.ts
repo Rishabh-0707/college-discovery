@@ -19,11 +19,58 @@ export async function POST(request: NextRequest) {
 
     // 2. Identify which colleges are referenced in the query
     const matchedCollegesList = allColleges.filter(c => {
-      const slugClean = c.slug.replace('-', ' ');
-      return userQuery.includes(c.slug) || 
-             userQuery.includes(slugClean) || 
-             userQuery.includes(c.name.toLowerCase()) || 
-             userQuery.includes(c.location.toLowerCase());
+      const query = userQuery.toLowerCase().trim();
+      const slugLower = c.slug.toLowerCase();
+      const slugClean = slugLower.replace(/-/g, ' ');
+      const nameLower = c.name.toLowerCase();
+      const locationLower = c.location.toLowerCase();
+
+      // Check direct matches first
+      if (
+        query.includes(slugLower) ||
+        query.includes(slugClean) ||
+        query.includes(nameLower)
+      ) {
+        return true;
+      }
+
+      // Check curated synonyms / abbreviations
+      const synonyms: Record<string, string[]> = {
+        'iit-bombay': ['iit bombay', 'iitb', 'iit mumbai', 'bombay', 'mumbai'],
+        'iit-delhi': ['iit delhi', 'iitd', 'delhi'],
+        'nit-trichy': ['nit trichy', 'nitt', 'trichy', 'tiruchirappalli'],
+        'bits-pilani': ['bits pilani', 'bits', 'pilani'],
+        'vit-vellore': ['vit vellore', 'vit', 'vellore'],
+        'dtu-delhi': ['dtu delhi', 'dtu', 'delhi technological university', 'dce', 'delhi technological'],
+        'iit-madras': ['iit madras', 'iitm', 'iit chennai', 'madras', 'chennai'],
+        'nit-warangal': ['nit warangal', 'nitw', 'warangal']
+      };
+
+      const collegeSyns = synonyms[c.slug];
+      if (collegeSyns) {
+        // Match exact word boundaries or clear substring match for acronyms
+        for (const syn of collegeSyns) {
+          if (syn.length <= 4) {
+            // Check if it exists as a distinct word in the query to avoid false substring matches
+            const regex = new RegExp(`\\b${syn}\\b`, 'i');
+            if (regex.test(query)) {
+              return true;
+            }
+          } else {
+            if (query.includes(syn)) {
+              return true;
+            }
+          }
+        }
+      }
+
+      // Fallback: Check if location is referenced as a distinct word in query
+      const locationRegex = new RegExp(`\\b${locationLower}\\b`, 'i');
+      if (locationRegex.test(query)) {
+        return true;
+      }
+
+      return false;
     });
 
     let reply = '';
