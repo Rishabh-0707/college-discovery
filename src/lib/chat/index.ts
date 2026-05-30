@@ -45,9 +45,12 @@ export async function orchestrateChat(userQuery: string): Promise<string> {
   if (finalMatches.length > 0) {
     const colleges = await prisma.college.findMany({
       where: { id: { in: finalMatches.map((c) => c.id) } },
-      include: {
-        courses: { orderBy: { feesPerYear: 'desc' } },
-        placements: { orderBy: { year: 'desc' } },
+      select: {
+        id: true, name: true, slug: true, location: true, state: true,
+        type: true, established: true, rating: true, totalReviews: true,
+        accreditation: true, feesMin: true, feesMax: true, examAccepted: true,
+        courses:    { select: { id: true, name: true, degree: true, feesPerYear: true, totalSeats: true }, orderBy: { feesPerYear: 'desc' as const } },
+        placements: { select: { id: true, year: true, avgPackage: true, highestPackage: true, placementRate: true, topCompanies: true }, orderBy: { year: 'desc' as const } },
       },
     });
 
@@ -61,18 +64,39 @@ export async function orchestrateChat(userQuery: string): Promise<string> {
   if (/highest package|best placement|highest salary/i.test(query)) {
     const top = await prisma.placement.findFirst({
       orderBy: { highestPackage: 'desc' },
-      include: { college: { include: { placements: { orderBy: { year: 'desc' }, take: 1 } } } },
+      select: {
+        highestPackage: true,
+        avgPackage:     true,
+        placementRate:  true,
+        topCompanies:   true,
+        college: {
+          select: {
+            name: true,
+            placements: {
+              select: { highestPackage: true, avgPackage: true, placementRate: true, topCompanies: true },
+              orderBy: { year: 'desc' as const },
+              take: 1,
+            },
+          },
+        },
+      },
     });
     if (top) return buildTopPlacement(top.college);
   }
 
   if (/cheapest|lowest fee|affordable/i.test(query)) {
-    const cheapest = await prisma.college.findFirst({ orderBy: { feesMin: 'asc' } });
+    const cheapest = await prisma.college.findFirst({
+      orderBy: { feesMin: 'asc' },
+      select: { name: true, feesMin: true, feesMax: true, type: true, location: true, state: true },
+    });
     if (cheapest) return buildCheapest(cheapest);
   }
 
   if (/highest rating|best college|top rated/i.test(query)) {
-    const topRated = await prisma.college.findFirst({ orderBy: { rating: 'desc' } });
+    const topRated = await prisma.college.findFirst({
+      orderBy: { rating: 'desc' },
+      select: { name: true, rating: true, totalReviews: true, accreditation: true, location: true, state: true },
+    });
     if (topRated) return buildTopRated(topRated);
   }
 
