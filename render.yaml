@@ -6,7 +6,7 @@ services:
     plan: free
 
     # Render runs this on every deploy
-    buildCommand: npm install && npm run build:prod
+    buildCommand: npm install --include=dev && npm run build:prod
 
     # Runs after build to start the server
     startCommand: npm start
