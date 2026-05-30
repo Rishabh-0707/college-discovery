@@ -10,6 +10,7 @@ import { Star, MapPin, GitCompareArrows, Check, Building2 } from 'lucide-react';
 
 interface CollegeCardProps {
   college: CollegeListItem;
+  priority?: boolean;
 }
 
 const typeColors: Record<string, string> = {
@@ -22,7 +23,7 @@ const typeColors: Record<string, string> = {
   DEEMED: 'bg-slate-50 text-slate-600 border border-slate-200',
 };
 
-export default function CollegeCard({ college }: CollegeCardProps) {
+export default function CollegeCard({ college, priority = false }: CollegeCardProps) {
   const { addCollege, removeCollege, isInCompare, colleges } = useCompareStore();
   const [mounted, setMounted] = useState(false);
 
@@ -53,6 +54,7 @@ export default function CollegeCard({ college }: CollegeCardProps) {
               src={college.imageUrl}
               alt={college.name}
               fill
+              priority={priority}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover transition-transform duration-700 group-hover:scale-105"
             />

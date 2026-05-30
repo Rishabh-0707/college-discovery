@@ -236,9 +236,9 @@ export function CollegesClient({ initialData }: { initialData: CollegesResponse 
           ) : (
             <>
               <div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 transition-all duration-500 ${isPending ? 'opacity-40 scale-[0.98] pointer-events-none' : 'opacity-100 scale-100'}`}>
-                {data?.colleges.map((college) => (
+                {data?.colleges.map((college, idx) => (
                   <div key={college.id} className="animate-fade-in">
-                    <CollegeCard college={college} />
+                    <CollegeCard college={college} priority={idx < 3} />
                   </div>
                 ))}
               </div>
