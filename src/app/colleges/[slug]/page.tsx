@@ -1,8 +1,13 @@
 import { notFound } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { getCollege } from '@/lib/colleges';
 import CollegeDetailClient from './CollegeDetailClient';
 import { CollegeDetail } from '@/types';
+
+// generateMetadata and the page body both call getCollege(slug).
+// React.cache (inside src/lib/colleges.ts) ensures exactly ONE DB round-trip
+// per request, regardless of how many times getCollege is called.
 
 export async function generateMetadata({
   params,
@@ -10,21 +15,20 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const college = await prisma.college.findUnique({
-    where: { slug },
-    select: { name: true, description: true, location: true, state: true },
-  });
+  const college = await getCollege(slug);
 
   if (!college) {
     return {
-      title: 'College Not Found | College Discovery',
+      title: 'College Not Found | CollegeQ',
       description: 'The requested college could not be found.',
     };
   }
 
   return {
-    title: `${college.name} - Admission, Courses, Fees, Placements | College Discovery`,
-    description: college.description.substring(0, 160) || `Explore admission, courses, fee structures, placement records, and reviews for ${college.name} in ${college.location}, ${college.state}.`,
+    title: `${college.name} - Admission, Courses, Fees, Placements | CollegeQ`,
+    description:
+      college.description.substring(0, 160) ||
+      `Explore admission, courses, fee structures, placement records, and reviews for ${college.name} in ${college.location}, ${college.state}.`,
   };
 }
 
@@ -36,19 +40,10 @@ export default async function CollegeDetailPage({
   const { slug } = await params;
   const session = await auth();
 
+  // getCollege is React.cache-memoised — same result as generateMetadata above,
+  // no extra DB call.
   const [dbCollege, saved] = await Promise.all([
-    prisma.college.findUnique({
-      where: { slug },
-      include: {
-        courses: { orderBy: { feesPerYear: 'desc' } },
-        placements: { orderBy: { year: 'desc' } },
-        reviews: {
-          include: { user: { select: { name: true } } },
-          orderBy: { createdAt: 'desc' },
-          take: 10,
-        },
-      },
-    }),
+    getCollege(slug),
     session?.user?.id
       ? prisma.savedCollege.findFirst({
           where: {
@@ -65,7 +60,7 @@ export default async function CollegeDetailPage({
 
   const isSaved = !!saved;
 
-  // Format Date object to string to avoid serialization issues
+  // Serialise Dates to strings so they can cross the server → client boundary
   const college: CollegeDetail = {
     ...dbCollege,
     examAccepted: dbCollege.examAccepted as string[],
@@ -73,8 +68,7 @@ export default async function CollegeDetailPage({
       ...review,
       createdAt: review.createdAt.toISOString(),
     })),
-    _isSaved: isSaved,
   };
 
-  return <CollegeDetailClient college={college} />;
+  return <CollegeDetailClient college={college} isSaved={isSaved} />;
 }

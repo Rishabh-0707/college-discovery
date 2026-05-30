@@ -25,7 +25,6 @@ export interface CollegeDetail extends CollegeListItem {
   courses: Course[];
   placements: Placement[];
   reviews: ReviewWithUser[];
-  _isSaved?: boolean;
 }
 
 export interface Course {

@@ -10,25 +10,31 @@ import { useSession } from 'next-auth/react';
 
 interface CollegeDetailClientProps {
   college: CollegeDetail;
+  /** Passed as a clean separate prop — not embedded in the domain type */
+  isSaved: boolean;
 }
 
-export default function CollegeDetailClient({ college }: CollegeDetailClientProps) {
+export default function CollegeDetailClient({ college, isSaved: initialSaved }: CollegeDetailClientProps) {
   const { data: session } = useSession();
   const [activeTab, setActiveTab] = useState<'overview' | 'courses' | 'placements' | 'reviews'>('overview');
-  const [isSaved, setIsSaved] = useState(college._isSaved || false);
+  const [isSaved, setIsSaved] = useState(initialSaved);
 
   const handleSaveToggle = async () => {
     if (!session) return alert('Please sign in to save colleges');
 
+    // Capture the previous value BEFORE the optimistic flip so the catch
+    // can restore it correctly even if the state updated asynchronously.
+    const previousValue = isSaved;
+    setIsSaved(!previousValue); // Optimistic update
+
     try {
-      setIsSaved(!isSaved); // Optimistic
       await fetch('/api/saved', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ collegeId: college.id }),
       });
-    } catch (e) {
-      setIsSaved(!isSaved); // Revert on error
+    } catch {
+      setIsSaved(previousValue); // Safe rollback to captured value
     }
   };
 

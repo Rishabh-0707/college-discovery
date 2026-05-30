@@ -14,13 +14,17 @@ export function CollegesClient({ initialData }: { initialData: CollegesResponse 
   const [isPending, startTransition] = useTransition();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
+  const VALID_SORT_FIELDS: NonNullable<CollegeFilters['sortBy']>[] = ['rating', 'feesMin', 'feesMax', 'established', 'name'];
+  const rawSort = searchParams.get('sortBy');
+  const rawOrder = searchParams.get('sortOrder');
+
   // Local filters state synced with URL queries for immediate input feedback
   const [filters, setFilters] = useState<CollegeFilters>({
-    search: searchParams.get('search') || '',
-    type: searchParams.get('type') || '',
-    sortBy: (searchParams.get('sortBy') as any) || 'rating',
-    sortOrder: (searchParams.get('sortOrder') as any) || 'desc',
-    page: parseInt(searchParams.get('page') || '1'),
+    search:    searchParams.get('search') || '',
+    type:      searchParams.get('type')   || '',
+    sortBy:    (VALID_SORT_FIELDS.includes(rawSort as any) ? rawSort : 'rating') as CollegeFilters['sortBy'],
+    sortOrder: (rawOrder === 'asc' ? 'asc' : 'desc') as 'asc' | 'desc',
+    page:      parseInt(searchParams.get('page') || '1'),
   });
 
   const data = initialData;
@@ -31,7 +35,6 @@ export function CollegesClient({ initialData }: { initialData: CollegesResponse 
     Object.entries(newFilters).forEach(([key, value]) => {
       if (value) query.append(key, value.toString());
     });
-    
     startTransition(() => {
       router.push(`/colleges?${query.toString()}`, { scroll: false });
     });
@@ -43,14 +46,15 @@ export function CollegesClient({ initialData }: { initialData: CollegesResponse 
     [updateUrl]
   );
 
-  // Sync local filters with URL query parameters (e.g., when browser Back button is clicked)
+  // Sync local filters with URL query parameters (e.g. browser Back button)
   useEffect(() => {
+    const raw = searchParams.get('sortBy');
     setFilters({
-      search: searchParams.get('search') || '',
-      type: searchParams.get('type') || '',
-      sortBy: (searchParams.get('sortBy') as any) || 'rating',
-      sortOrder: (searchParams.get('sortOrder') as any) || 'desc',
-      page: parseInt(searchParams.get('page') || '1'),
+      search:    searchParams.get('search') || '',
+      type:      searchParams.get('type')   || '',
+      sortBy:    (VALID_SORT_FIELDS.includes(raw as any) ? raw : 'rating') as CollegeFilters['sortBy'],
+      sortOrder: (searchParams.get('sortOrder') === 'asc' ? 'asc' : 'desc') as 'asc' | 'desc',
+      page:      parseInt(searchParams.get('page') || '1'),
     });
   }, [searchParams]);
 
@@ -60,7 +64,7 @@ export function CollegesClient({ initialData }: { initialData: CollegesResponse 
     debouncedUpdateUrl(newFilters);
   };
 
-  const handleFilterChange = (key: keyof CollegeFilters, value: any) => {
+  const handleFilterChange = (key: keyof CollegeFilters, value: CollegeFilters[typeof key]) => {
     const newFilters = { ...filters, [key]: value, page: 1 };
     setFilters(newFilters);
     updateUrl(newFilters);
@@ -192,11 +196,15 @@ export function CollegesClient({ initialData }: { initialData: CollegesResponse 
                 value={`${filters.sortBy}-${filters.sortOrder}`}
                 onChange={(e) => {
                   const [sortBy, sortOrder] = e.target.value.split('-');
-                  handleFilterChange('sortBy', sortBy);
-                  // Ensure sortOrder is set appropriately in the dynamic update
-                  const nextFilters = { ...filters, sortBy: sortBy as any, sortOrder: sortOrder as any, page: 1 };
+                  // Build the combined update once and push exactly once
+                  const nextFilters: CollegeFilters = {
+                    ...filters,
+                    sortBy:    sortBy    as CollegeFilters['sortBy'],
+                    sortOrder: sortOrder as 'asc' | 'desc',
+                    page: 1,
+                  };
                   setFilters(nextFilters);
-                  updateUrl(nextFilters);
+                  updateUrl(nextFilters); // single router.push — no double-fire
                 }}
                 className="px-4 py-3 rounded-none border border-slate-200 bg-white text-sm font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#E81A2D] focus:border-[#E81A2D] shadow-sm"
               >
