@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { ArrowRight, BookOpen, Trophy, Users, Globe, Briefcase, Sparkles } from 'lucide-react';
 
 const features = [
@@ -13,7 +13,7 @@ const features = [
   { icon: Sparkles, title: "Holistic Development", desc: "Evaluate extracurricular opportunities, tech clubs, and startup incubation centers available on campus." }
 ];
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -24,7 +24,7 @@ const containerVariants = {
   }
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20, filter: 'blur(4px)' },
   show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 1, ease: [0.22, 1, 0.36, 1] } }
 };

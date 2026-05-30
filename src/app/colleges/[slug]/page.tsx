@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 import { CollegeDetail } from '@/types';
 import { usePathname, useRouter } from 'next/navigation';
@@ -66,11 +67,6 @@ export default function CollegeDetailPage() {
     <div className="pb-16">
       {/* Header Banner */}
       <div className="relative h-[300px] w-full bg-slate-900">
-          {/* Back button */}
-          <button onClick={() => router.back()} className="absolute top-4 left-4 flex items-center gap-2 text-white hover:text-[#E81A2D] transition-colors">
-            <ArrowLeft className="h-5 w-5" />
-            <span className="font-medium text-sm">Back</span>
-          </button>
         {college.imageUrl ? (
           <img src={college.imageUrl} alt={college.name} className="h-full w-full object-cover opacity-60" />
         ) : (
@@ -80,6 +76,10 @@ export default function CollegeDetailPage() {
         
         <div className="absolute bottom-0 left-0 right-0 p-8">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <Link href="/colleges" className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors mb-4 text-sm font-medium">
+              <ArrowLeft className="h-4 w-4" />
+              Back to Colleges
+            </Link>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
                 <div className="flex flex-wrap items-center gap-2 mb-3">
