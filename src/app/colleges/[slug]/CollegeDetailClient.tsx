@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { CollegeDetail } from '@/types';
 import { formatFees, formatPackage } from '@/lib/utils';
 import { ArrowLeft, Star, MapPin, Building2, Globe, CheckCircle2, Bookmark, BookmarkCheck } from 'lucide-react';
@@ -36,7 +37,7 @@ export default function CollegeDetailClient({ college }: CollegeDetailClientProp
       {/* Header Banner */}
       <div className="relative h-[300px] w-full bg-slate-900">
         {college.imageUrl ? (
-          <img src={college.imageUrl} alt={college.name} className="h-full w-full object-cover opacity-60" />
+          <Image src={college.imageUrl} alt={college.name} fill priority className="object-cover opacity-60" />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 to-purple-900" />
         )}

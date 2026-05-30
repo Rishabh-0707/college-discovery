@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { CollegeListItem } from '@/types';
 import { useCompareStore } from '@/store/useCompareStore';
 import { formatFees } from '@/lib/utils';
@@ -48,10 +49,12 @@ export default function CollegeCard({ college }: CollegeCardProps) {
         {/* Image / Header Area */}
         <div className="relative h-48 overflow-hidden bg-slate-100">
           {college.imageUrl ? (
-            <img
+            <Image
               src={college.imageUrl}
               alt={college.name}
-              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
           ) : (
             <div className="flex h-full items-center justify-center">
@@ -60,7 +63,7 @@ export default function CollegeCard({ college }: CollegeCardProps) {
           )}
 
           {/* Type Badge */}
-          <span className={`absolute top-0 left-0 inline-flex items-center px-3 py-1.5 text-[10px] font-bold tracking-wider uppercase ${typeColors[college.type] || typeColors.PRIVATE}`}>
+          <span className={`absolute top-0 left-0 inline-flex items-center px-3 py-1.5 text-[10px] font-bold tracking-wider uppercase z-10 ${typeColors[college.type] || typeColors.PRIVATE}`}>
             {college.type}
           </span>
         </div>

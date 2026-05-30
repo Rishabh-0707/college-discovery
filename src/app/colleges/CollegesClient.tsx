@@ -1,6 +1,7 @@
 'use client';
+
 import Link from 'next/link';
-import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
+import { useState, useEffect, useCallback, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CollegesResponse, CollegeFilters, CollegeType } from '@/types';
 import CollegeCard from '@/components/CollegeCard';
@@ -10,12 +11,10 @@ import { debounce } from '@/lib/utils';
 export function CollegesClient({ initialData }: { initialData: CollegesResponse }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
-  const [data, setData] = useState<CollegesResponse | null>(initialData);
-  const [loading, setLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  // Parse filters from URL or use defaults
+  // Local filters state synced with URL queries for immediate input feedback
   const [filters, setFilters] = useState<CollegeFilters>({
     search: searchParams.get('search') || '',
     type: searchParams.get('type') || '',
@@ -24,51 +23,47 @@ export function CollegesClient({ initialData }: { initialData: CollegesResponse 
     page: parseInt(searchParams.get('page') || '1'),
   });
 
-  const isFirstRender = useRef(true);
+  const data = initialData;
 
-  const fetchColleges = useCallback(async (currentFilters: CollegeFilters) => {
-    setLoading(true);
-    try {
-      const query = new URLSearchParams();
-      Object.entries(currentFilters).forEach(([key, value]) => {
-        if (value) query.append(key, value.toString());
-      });
-      
-      const res = await fetch(`/api/colleges?${query.toString()}`);
-      const json = await res.json();
-      setData(json);
-      
-      // Update URL without full page reload
+  // Unified router pushing logic wrapped inside Next.js concurrent transition
+  const updateUrl = useCallback((newFilters: CollegeFilters) => {
+    const query = new URLSearchParams();
+    Object.entries(newFilters).forEach(([key, value]) => {
+      if (value) query.append(key, value.toString());
+    });
+    
+    startTransition(() => {
       router.push(`/colleges?${query.toString()}`, { scroll: false });
-    } catch (error) {
-      console.error('Failed to fetch colleges:', error);
-    } finally {
-      setLoading(false);
-    }
+    });
   }, [router]);
 
-  // Debounced fetch for search
-  const debouncedFetch = useCallback(
-    debounce((f: CollegeFilters) => fetchColleges(f), 300),
-    [fetchColleges]
+  // Debounced URL updates for search input to prevent firing rapid queries
+  const debouncedUpdateUrl = useCallback(
+    debounce((f: CollegeFilters) => updateUrl(f), 300),
+    [updateUrl]
   );
 
+  // Sync local filters with URL query parameters (e.g., when browser Back button is clicked)
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    fetchColleges(filters);
-  }, [filters.page, filters.sortBy, filters.sortOrder, filters.type]); // Search is handled by debouncedFetch
+    setFilters({
+      search: searchParams.get('search') || '',
+      type: searchParams.get('type') || '',
+      sortBy: (searchParams.get('sortBy') as any) || 'rating',
+      sortOrder: (searchParams.get('sortOrder') as any) || 'desc',
+      page: parseInt(searchParams.get('page') || '1'),
+    });
+  }, [searchParams]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newFilters = { ...filters, search: e.target.value, page: 1 };
     setFilters(newFilters);
-    debouncedFetch(newFilters);
+    debouncedUpdateUrl(newFilters);
   };
 
   const handleFilterChange = (key: keyof CollegeFilters, value: any) => {
-    setFilters((prev) => ({ ...prev, [key]: value, page: 1 }));
+    const newFilters = { ...filters, [key]: value, page: 1 };
+    setFilters(newFilters);
+    updateUrl(newFilters);
   };
 
   const collegeTypes = Object.values(CollegeType);
@@ -193,12 +188,15 @@ export function CollegesClient({ initialData }: { initialData: CollegesResponse 
               >
                 <SlidersHorizontal className="h-5 w-5" />
               </button>
-
               <select
                 value={`${filters.sortBy}-${filters.sortOrder}`}
                 onChange={(e) => {
                   const [sortBy, sortOrder] = e.target.value.split('-');
-                  setFilters((prev) => ({ ...prev, sortBy: sortBy as any, sortOrder: sortOrder as any, page: 1 }));
+                  handleFilterChange('sortBy', sortBy);
+                  // Ensure sortOrder is set appropriately in the dynamic update
+                  const nextFilters = { ...filters, sortBy: sortBy as any, sortOrder: sortOrder as any, page: 1 };
+                  setFilters(nextFilters);
+                  updateUrl(nextFilters);
                 }}
                 className="px-4 py-3 rounded-none border border-slate-200 bg-white text-sm font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#E81A2D] focus:border-[#E81A2D] shadow-sm"
               >
@@ -213,26 +211,23 @@ export function CollegesClient({ initialData }: { initialData: CollegesResponse 
           {/* Results Info */}
           <div className="mb-4 text-sm font-medium text-slate-500 uppercase tracking-wider">
             {data ? (
-              <span>Showing {data.colleges.length} of {data.total} colleges</span>
+              <span className="flex items-center gap-2">
+                Showing {data.colleges.length} of {data.total} colleges
+                {isPending && <span className="text-xs text-slate-400 lowercase italic animate-pulse">(updating...)</span>}
+              </span>
             ) : (
               <span>Loading...</span>
             )}
           </div>
 
           {/* Grid */}
-          {loading && !data ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-[360px] bg-slate-100 border border-slate-200 animate-pulse" />
-              ))}
-            </div>
-          ) : data?.colleges.length === 0 ? (
+          {data?.colleges.length === 0 ? (
             <div className="text-center py-32 bg-[#FAFAFA] border border-slate-200 border-dashed">
               <Search className="mx-auto h-12 w-12 text-slate-300 mb-6" />
               <h3 className="font-serif text-2xl font-bold text-slate-900">No colleges found</h3>
               <p className="text-slate-500 mt-2 text-lg">Try adjusting your search or filters.</p>
               <button 
-                onClick={() => setFilters({ search: '', page: 1 })}
+                onClick={() => handleFilterChange('search', '')}
                 className="mt-6 text-[#E81A2D] font-bold uppercase tracking-widest text-sm hover:underline"
               >
                 Clear all filters
@@ -240,7 +235,7 @@ export function CollegesClient({ initialData }: { initialData: CollegesResponse 
             </div>
           ) : (
             <>
-              <div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 transition-all duration-500 ${loading ? 'opacity-40 scale-[0.98]' : 'opacity-100 scale-100'}`}>
+              <div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 transition-all duration-500 ${isPending ? 'opacity-40 scale-[0.98] pointer-events-none' : 'opacity-100 scale-100'}`}>
                 {data?.colleges.map((college) => (
                   <div key={college.id} className="animate-fade-in">
                     <CollegeCard college={college} />
@@ -252,8 +247,8 @@ export function CollegesClient({ initialData }: { initialData: CollegesResponse 
               {data && data.totalPages > 1 && (
                 <div className="mt-16 flex items-center justify-center gap-2">
                   <button
-                    disabled={filters.page === 1}
-                    onClick={() => setFilters((p) => ({ ...p, page: (p.page || 1) - 1 }))}
+                    disabled={filters.page === 1 || isPending}
+                    onClick={() => handleFilterChange('page', (filters.page || 1) - 1)}
                     className="p-3 border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:text-[#E81A2D] hover:border-slate-300"
                   >
                     <ChevronLeft className="h-5 w-5" />
@@ -262,8 +257,8 @@ export function CollegesClient({ initialData }: { initialData: CollegesResponse 
                     Page {data.page} of {data.totalPages}
                   </span>
                   <button
-                    disabled={filters.page === data.totalPages}
-                    onClick={() => setFilters((p) => ({ ...p, page: (p.page || 1) + 1 }))}
+                    disabled={filters.page === data.totalPages || isPending}
+                    onClick={() => handleFilterChange('page', (filters.page || 1) + 1)}
                     className="p-3 border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:text-[#E81A2D] hover:border-slate-300"
                   >
                     <ChevronRight className="h-5 w-5" />
