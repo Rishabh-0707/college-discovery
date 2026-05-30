@@ -36,30 +36,34 @@ export default async function CollegeDetailPage({
   const { slug } = await params;
   const session = await auth();
 
-  const dbCollege = await prisma.college.findUnique({
-    where: { slug },
-    include: {
-      courses: { orderBy: { feesPerYear: 'desc' } },
-      placements: { orderBy: { year: 'desc' } },
-      reviews: {
-        include: { user: { select: { name: true } } },
-        orderBy: { createdAt: 'desc' },
-        take: 10,
+  const [dbCollege, saved] = await Promise.all([
+    prisma.college.findUnique({
+      where: { slug },
+      include: {
+        courses: { orderBy: { feesPerYear: 'desc' } },
+        placements: { orderBy: { year: 'desc' } },
+        reviews: {
+          include: { user: { select: { name: true } } },
+          orderBy: { createdAt: 'desc' },
+          take: 10,
+        },
       },
-    },
-  });
+    }),
+    session?.user?.id
+      ? prisma.savedCollege.findFirst({
+          where: {
+            userId: session.user.id,
+            college: { slug },
+          },
+        })
+      : Promise.resolve(null),
+  ]);
 
   if (!dbCollege) {
     notFound();
   }
 
-  let isSaved = false;
-  if (session?.user?.id) {
-    const saved = await prisma.savedCollege.findUnique({
-      where: { userId_collegeId: { userId: session.user.id, collegeId: dbCollege.id } },
-    });
-    isSaved = !!saved;
-  }
+  const isSaved = !!saved;
 
   // Format Date object to string to avoid serialization issues
   const college: CollegeDetail = {
