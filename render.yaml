@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: collegeq
+    runtime: node
+    region: oregon
+    plan: free
+
+    # Render runs this on every deploy
+    buildCommand: npm ci && npm run build:prod
+
+    # Runs after build to start the server
+    startCommand: npm start
+
+    # Auto-deploy when you push to main
+    autoDeploy: true
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      # Set these in Render dashboard → Environment:
+      - key: DATABASE_URL
+        sync: false          # Never commit this
+
+      - key: AUTH_SECRET
+        sync: false          # Never commit this
+
+      - key: AUTH_URL
+        sync: false          # Set to https://your-app-name.onrender.com
+
+    healthCheckPath: /api/colleges

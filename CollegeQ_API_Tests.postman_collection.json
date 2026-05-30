@@ -1,0 +1,420 @@
+{
+  "info": {
+    "name": "CollegeQ API — Full Test Suite",
+    "description": "Complete Postman collection to test all CollegeQ API endpoints. Base URL: http://localhost:3001",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3001" },
+    { "key": "id_iit_bombay",  "value": "cmplip8qs00018dyrm60fbnxe" },
+    { "key": "id_iit_delhi",   "value": "cmplipdqx000o8dyrn4uxakpi" },
+    { "key": "id_iit_madras",  "value": "cmplipxxj003p8dyrlbpb375g" },
+    { "key": "id_bits_pilani", "value": "cmplipno4001w8dyrvnmjixa3" },
+    { "key": "id_nit_trichy",  "value": "cmplipid100198dyrv1apqono" },
+    { "key": "id_nit_warangal","value": "cmpliq16l004c8dyrttcyyi5k" },
+    { "key": "id_dtu_delhi",   "value": "cmplipue500348dyr70a41ht4" },
+    { "key": "id_vit_vellore", "value": "cmplipr5t002h8dyrnbdt04lt" }
+  ],
+  "item": [
+    {
+      "name": "1. Colleges — List",
+      "item": [
+        {
+          "name": "GET All Colleges (default)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/colleges"
+          }
+        },
+        {
+          "name": "GET Colleges — Filter by Type IIT",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/colleges?type=IIT",
+              "query": [{ "key": "type", "value": "IIT" }]
+            }
+          }
+        },
+        {
+          "name": "GET Colleges — Filter by Type NIT",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/colleges?type=NIT",
+              "query": [{ "key": "type", "value": "NIT" }]
+            }
+          }
+        },
+        {
+          "name": "GET Colleges — Search by name",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/colleges?search=bombay",
+              "query": [{ "key": "search", "value": "bombay" }]
+            }
+          }
+        },
+        {
+          "name": "GET Colleges — Sort by Lowest Fees",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/colleges?sortBy=feesMin&sortOrder=asc",
+              "query": [
+                { "key": "sortBy", "value": "feesMin" },
+                { "key": "sortOrder", "value": "asc" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Colleges — Sort by Highest Rating",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/colleges?sortBy=rating&sortOrder=desc",
+              "query": [
+                { "key": "sortBy", "value": "rating" },
+                { "key": "sortOrder", "value": "desc" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Colleges — Pagination (page 2)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/colleges?page=2&pageSize=3",
+              "query": [
+                { "key": "page", "value": "2" },
+                { "key": "pageSize", "value": "3" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET Colleges — ⚠ Invalid sort field (should fallback safely)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/colleges?sortBy=passwordHash",
+              "query": [{ "key": "sortBy", "value": "passwordHash" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. College Detail",
+      "item": [
+        {
+          "name": "GET IIT Bombay Detail",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/colleges/iit-bombay"
+          }
+        },
+        {
+          "name": "GET IIT Delhi Detail",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/colleges/iit-delhi"
+          }
+        },
+        {
+          "name": "GET BITS Pilani Detail",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/colleges/bits-pilani"
+          }
+        },
+        {
+          "name": "GET NIT Trichy Detail",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/colleges/nit-trichy"
+          }
+        },
+        {
+          "name": "GET DTU Delhi Detail",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/colleges/dtu-delhi"
+          }
+        },
+        {
+          "name": "GET VIT Vellore Detail",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/colleges/vit-vellore"
+          }
+        },
+        {
+          "name": "GET ⚠ Non-existent College (expect 404)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/colleges/does-not-exist"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Compare",
+      "item": [
+        {
+          "name": "POST Compare IIT Bombay vs BITS Pilani",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"collegeIds\": [\n    \"{{id_iit_bombay}}\",\n    \"{{id_bits_pilani}}\"\n  ]\n}"
+            },
+            "url": "{{base_url}}/api/compare"
+          }
+        },
+        {
+          "name": "POST Compare IIT Delhi vs NIT Trichy vs VIT",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"collegeIds\": [\n    \"{{id_iit_delhi}}\",\n    \"{{id_nit_trichy}}\",\n    \"{{id_vit_vellore}}\"\n  ]\n}"
+            },
+            "url": "{{base_url}}/api/compare"
+          }
+        },
+        {
+          "name": "POST ⚠ Too Many IDs (expect 400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"collegeIds\": [\"a\", \"b\", \"c\", \"d\"]\n}"
+            },
+            "url": "{{base_url}}/api/compare"
+          }
+        },
+        {
+          "name": "POST ⚠ Only One ID (expect 400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"collegeIds\": [\"{{id_iit_bombay}}\"]\n}"
+            },
+            "url": "{{base_url}}/api/compare"
+          }
+        },
+        {
+          "name": "POST ⚠ Empty body (expect 400/500)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": "{{base_url}}/api/compare"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. AI Chatbot",
+      "item": [
+        {
+          "name": "POST Chat — Single College Info (IIT Bombay)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \"tell me about iit bombay\" }\n  ]\n}"
+            },
+            "url": "{{base_url}}/api/chat"
+          }
+        },
+        {
+          "name": "POST Chat — Compare IIT vs BITS",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \"iit vs bits\" }\n  ]\n}"
+            },
+            "url": "{{base_url}}/api/chat"
+          }
+        },
+        {
+          "name": "POST Chat — Compare by full name",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \"compare iit delhi and nit trichy\" }\n  ]\n}"
+            },
+            "url": "{{base_url}}/api/chat"
+          }
+        },
+        {
+          "name": "POST Chat — Highest Package Query",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \"which college has the highest package?\" }\n  ]\n}"
+            },
+            "url": "{{base_url}}/api/chat"
+          }
+        },
+        {
+          "name": "POST Chat — Cheapest/Affordable College",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \"which college has the lowest fees?\" }\n  ]\n}"
+            },
+            "url": "{{base_url}}/api/chat"
+          }
+        },
+        {
+          "name": "POST Chat — Top Rated College",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \"which is the best college?\" }\n  ]\n}"
+            },
+            "url": "{{base_url}}/api/chat"
+          }
+        },
+        {
+          "name": "POST Chat — Acronym match (IITB)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \"tell me about iitb\" }\n  ]\n}"
+            },
+            "url": "{{base_url}}/api/chat"
+          }
+        },
+        {
+          "name": "POST Chat — Unknown query (fallback welcome)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    { \"role\": \"user\", \"content\": \"hello\" }\n  ]\n}"
+            },
+            "url": "{{base_url}}/api/chat"
+          }
+        },
+        {
+          "name": "POST Chat — ⚠ Empty messages (expect 400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": "{{base_url}}/api/chat"
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Saved Colleges (Auth Required)",
+      "item": [
+        {
+          "name": "GET Saved — ⚠ No Auth (expect 401)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/saved"
+          }
+        },
+        {
+          "name": "POST Save — ⚠ No Auth (expect 401)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"collegeId\": \"{{id_iit_bombay}}\"\n}"
+            },
+            "url": "{{base_url}}/api/saved"
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Auth — Register",
+      "item": [
+        {
+          "name": "POST Register — New User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"testuser@example.com\",\n  \"password\": \"securepass123\"\n}"
+            },
+            "url": "{{base_url}}/api/auth/register"
+          }
+        },
+        {
+          "name": "POST Register — ⚠ Duplicate Email (expect 409)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Demo User\",\n  \"email\": \"demo@collegediscovery.in\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": "{{base_url}}/api/auth/register"
+          }
+        },
+        {
+          "name": "POST Register — ⚠ Short Password (expect 400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test\",\n  \"email\": \"short@test.com\",\n  \"password\": \"abc\"\n}"
+            },
+            "url": "{{base_url}}/api/auth/register"
+          }
+        },
+        {
+          "name": "POST Register — ⚠ Invalid Email (expect 400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test\",\n  \"email\": \"not-an-email\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": "{{base_url}}/api/auth/register"
+          }
+        }
+      ]
+    }
+  ]
+}
