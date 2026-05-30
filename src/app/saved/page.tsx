@@ -1,54 +1,57 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { SavedCollegeResponse } from '@/types';
+import { auth } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { redirect } from 'next/navigation';
 import CollegeCard from '@/components/CollegeCard';
-import { Bookmark, Loader2, ArrowLeft } from 'lucide-react';
+import { Bookmark, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { CollegeListItem } from '@/types';
 
-export default function SavedCollegesPage() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-  const [saved, setSaved] = useState<SavedCollegeResponse[]>([]);
-  const [loading, setLoading] = useState(true);
+export const metadata = {
+  title: 'My Saved Collections | College Discovery',
+  description: 'View your curated list of prospect universities and colleges.',
+};
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/login');
-      return;
-    }
-
-    if (status === 'authenticated') {
-      fetch('/api/saved')
-        .then(res => res.json())
-        .then(data => {
-          setSaved(data);
-          setLoading(false);
-        })
-        .catch(console.error);
-    }
-  }, [status, router]);
-
-  if (status === 'loading' || loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-5rem)]">
-        <Loader2 className="h-10 w-10 animate-spin text-[#E81A2D]" />
-      </div>
-    );
+export default async function SavedCollegesPage() {
+  const session = await auth();
+  if (!session?.user?.id) {
+    redirect('/auth/login');
   }
+
+  const saved = await prisma.savedCollege.findMany({
+    where: { userId: session.user.id },
+    include: {
+      college: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          location: true,
+          state: true,
+          type: true,
+          feesMin: true,
+          feesMax: true,
+          rating: true,
+          totalReviews: true,
+          established: true,
+          imageUrl: true,
+          accreditation: true,
+          examAccepted: true,
+        },
+      },
+    },
+    orderBy: { savedAt: 'desc' },
+  });
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-32 pb-32 sm:px-6 lg:px-8">
       {/* Back Button */}
-      <button
-        onClick={() => router.back()}
+      <Link
+        href="/colleges"
         className="inline-flex items-center gap-2 text-slate-500 hover:text-[#E81A2D] transition-colors mb-8 text-sm font-medium"
       >
         <ArrowLeft className="h-4 w-4" />
-        Back
-      </button>
+        Back to Colleges
+      </Link>
       <div className="flex flex-col items-center text-center mb-16">
         <div className="h-16 w-16 rounded-full bg-red-50 flex items-center justify-center mb-6">
           <Bookmark className="h-7 w-7 text-[#E81A2D] stroke-[2]" />
@@ -73,7 +76,9 @@ export default function SavedCollegesPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
           {saved.map((item) => (
-            <CollegeCard key={item.collegeId} college={item.college} />
+            <div key={item.collegeId}>
+              <CollegeCard college={item.college as CollegeListItem} />
+            </div>
           ))}
         </div>
       )}

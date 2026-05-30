@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
 import { ArrowRight, BookOpen, Trophy, Users, Globe, Briefcase, Sparkles } from 'lucide-react';
 
@@ -83,10 +84,13 @@ export default function Home() {
                 transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
                 className="relative w-full aspect-[4/5] lg:aspect-square max-w-lg mx-auto"
               >
-                <img 
+                <Image 
                   src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop" 
                   alt="Classic University Architecture" 
-                  className="w-full h-full object-cover rounded-t-[140px] rounded-b-2xl shadow-2xl"
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover rounded-t-[140px] rounded-b-2xl shadow-2xl"
                 />
                 
                 {/* Floating Stat Card */}
