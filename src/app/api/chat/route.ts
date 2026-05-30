@@ -14,12 +14,13 @@ export async function POST(request: NextRequest) {
 
     // 1. Fetch all colleges to perform semantic matching
     const allColleges = await prisma.college.findMany({
-      select: { id: true, name: true, slug: true, location: true, state: true }
+      select: { id: true, name: true, slug: true, location: true, state: true, type: true }
     });
 
-    // 2. Identify which colleges are referenced in the query
-    const matchedCollegesList = allColleges.filter(c => {
-      const query = userQuery.toLowerCase().trim();
+    const query = userQuery.toLowerCase().trim();
+
+    // 2. Identify which colleges are referenced explicitly by name or synonym
+    let matchedColleges = allColleges.filter(c => {
       const slugLower = c.slug.toLowerCase();
       const slugClean = slugLower.replace(/-/g, ' ');
       const nameLower = c.name.toLowerCase();
@@ -73,13 +74,74 @@ export async function POST(request: NextRequest) {
       return false;
     });
 
+    // 3. Category Fallbacks / Multi-match expansion
+    // If the query mentions category terms like 'iit', 'nit', 'bits' but no specific college of that type was matched,
+    // we expand it to include representative colleges of that category.
+    const hasIITWord = /\biit\b/i.test(query);
+    const hasNITWord = /\bnit\b/i.test(query);
+    const hasBITSWord = /\bbits\b/i.test(query);
+
+    const matchedTypes = new Set(matchedColleges.map(c => c.type));
+    const matchedSlugs = new Set(matchedColleges.map(c => c.slug));
+    
+    let isCategoryExpansionApplied = false;
+
+    if (hasIITWord && !matchedTypes.has('IIT')) {
+      const isComparison = query.includes('vs') || query.includes('versus') || query.includes('compare');
+      if (isComparison) {
+        const iitBombay = allColleges.find(c => c.slug === 'iit-bombay');
+        if (iitBombay) {
+          matchedColleges.push(iitBombay);
+          isCategoryExpansionApplied = true;
+        }
+      } else {
+        // Add all IITs
+        allColleges.filter(c => c.type === 'IIT').forEach(c => {
+          if (!matchedSlugs.has(c.slug)) {
+            matchedColleges.push(c);
+            isCategoryExpansionApplied = true;
+          }
+        });
+      }
+    }
+
+    if (hasNITWord && !matchedTypes.has('NIT')) {
+      const isComparison = query.includes('vs') || query.includes('versus') || query.includes('compare');
+      if (isComparison) {
+        const nitTrichy = allColleges.find(c => c.slug === 'nit-trichy');
+        if (nitTrichy) {
+          matchedColleges.push(nitTrichy);
+          isCategoryExpansionApplied = true;
+        }
+      } else {
+        // Add all NITs
+        allColleges.filter(c => c.type === 'NIT').forEach(c => {
+          if (!matchedSlugs.has(c.slug)) {
+            matchedColleges.push(c);
+            isCategoryExpansionApplied = true;
+          }
+        });
+      }
+    }
+
+    if (hasBITSWord && !matchedTypes.has('BITS')) {
+      const bitsPilani = allColleges.find(c => c.slug === 'bits-pilani');
+      if (bitsPilani && !matchedSlugs.has(bitsPilani.slug)) {
+        matchedColleges.push(bitsPilani);
+        isCategoryExpansionApplied = true;
+      }
+    }
+
+    // Deduplicate matched colleges
+    matchedColleges = Array.from(new Map(matchedColleges.map(c => [c.id, c])).values());
+
     let reply = '';
 
-    // 3. Perform dynamic query handling based on database searches
-    if (matchedCollegesList.length > 0) {
+    // 4. Perform dynamic query handling based on database searches
+    if (matchedColleges.length > 0) {
       // Fetch full details of the matched colleges
       const colleges = await prisma.college.findMany({
-        where: { id: { in: matchedCollegesList.map(c => c.id) } },
+        where: { id: { in: matchedColleges.map(c => c.id) } },
         include: {
           courses: { orderBy: { feesPerYear: 'desc' } },
           placements: { orderBy: { year: 'desc' } }
@@ -103,7 +165,12 @@ export async function POST(request: NextRequest) {
                 `Would you like to compare ${col.name} with another college, say BITS Pilani or IIT Delhi?`;
       } else {
         // Multi-college comparison!
-        reply = `### 📊 College Comparison Report\n` +
+        const expansionNote = isCategoryExpansionApplied
+          ? `*Note: Since you compared general institutional categories, I've loaded premier representative campuses (**${colleges.map(c => c.name).join(' vs ')}**) to give you a side-by-side benchmark breakdown.*\n\n`
+          : '';
+
+        reply = expansionNote +
+                `### 📊 College Comparison Report\n` +
                 `Here is a side-by-side analysis of the **${colleges.length} colleges** you requested:\n\n` +
                 `| Metric | ` + colleges.map(c => c.name.split(' ').slice(0, 3).join(' ')).join(' | ') + ` |\n` +
                 `| :--- | ` + colleges.map(() => ':---:').join(' | ') + ` |\n` +
