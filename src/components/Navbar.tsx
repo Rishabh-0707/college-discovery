@@ -4,12 +4,19 @@ import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useCompareStore } from '@/store/useCompareStore';
 import { GitCompareArrows, Bookmark, Menu, X, Compass, LogIn, LogOut } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Navbar() {
   const { data: session } = useSession();
-  const compareCount = useCompareStore((s) => s.colleges.length);
+  const colleges = useCompareStore((s) => s.colleges);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const compareCount = mounted ? colleges.length : 0;
 
   return (
     <>

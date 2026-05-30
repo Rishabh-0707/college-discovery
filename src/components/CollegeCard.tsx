@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { CollegeListItem } from '@/types';
 import { useCompareStore } from '@/store/useCompareStore';
@@ -22,7 +23,13 @@ const typeColors: Record<string, string> = {
 
 export default function CollegeCard({ college }: CollegeCardProps) {
   const { addCollege, removeCollege, isInCompare, colleges } = useCompareStore();
-  const inCompare = isInCompare(college.id);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const inCompare = mounted ? isInCompare(college.id) : false;
 
   const handleCompareToggle = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -100,11 +107,11 @@ export default function CollegeCard({ college }: CollegeCardProps) {
             {/* Compare Button */}
             <button
               onClick={handleCompareToggle}
-              disabled={!inCompare && colleges.length >= 3}
+              disabled={mounted ? (!inCompare && colleges.length >= 3) : false}
               className={`flex items-center justify-center h-8 w-8 transition-colors ${
                 inCompare
                   ? 'bg-[#E81A2D] text-white'
-                  : colleges.length >= 3
+                  : (mounted && colleges.length >= 3)
                   ? 'bg-slate-100 text-slate-300 cursor-not-allowed'
                   : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900'
               }`}

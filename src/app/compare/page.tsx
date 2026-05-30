@@ -13,16 +13,23 @@ export default function ComparePage() {
   const { colleges: storeColleges, removeCollege, clearAll } = useCompareStore();
   const [data, setData] = useState<CollegeDetail[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const displayedColleges = mounted ? storeColleges : [];
 
   useEffect(() => {
     const fetchCompareData = async () => {
-      if (storeColleges.length < 2) {
+      if (displayedColleges.length < 2) {
         setLoading(false);
         return;
       }
       
       try {
-        const ids = storeColleges.map(c => c.id);
+        const ids = displayedColleges.map(c => c.id);
         const res = await fetch('/api/compare', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -38,9 +45,9 @@ export default function ComparePage() {
     };
     
     fetchCompareData();
-  }, [storeColleges]);
+  }, [displayedColleges]);
 
-  if (storeColleges.length < 2) {
+  if (displayedColleges.length < 2) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-32 text-center">
         <div className="bg-[#FAFAFA] text-slate-800 p-12 border border-slate-200 mb-8 flex flex-col items-center">
@@ -48,9 +55,9 @@ export default function ComparePage() {
           <h2 className="font-serif text-3xl font-medium mb-3">Not Enough Colleges</h2>
           <p className="text-slate-500 mb-8 text-lg">You need to select at least 2 colleges to compare them.</p>
           <div className="flex justify-center gap-4">
-            {storeColleges.length === 1 && (
+            {displayedColleges.length === 1 && (
               <div className="bg-white px-5 py-2.5 border border-slate-200 shadow-sm text-sm font-medium text-slate-700">
-                1 Selected: {storeColleges[0].name}
+                1 Selected: {displayedColleges[0].name}
               </div>
             )}
           </div>
