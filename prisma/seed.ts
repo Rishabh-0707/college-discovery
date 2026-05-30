@@ -92,7 +92,7 @@ const colleges = [
     totalReviews: 2100,
     established: 1984,
     description: 'VIT Vellore is one of the top private engineering universities in India, known for its industry-oriented curriculum, international collaborations, and strong placement support. It offers over 60 undergraduate programs across disciplines.',
-    imageUrl: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800',
+    imageUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800',
     accreditation: 'NAAC A++',
     website: 'https://vit.ac.in',
     examAccepted: ['VITEEE', 'JEE Main'],
