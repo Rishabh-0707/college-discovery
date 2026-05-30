@@ -111,7 +111,7 @@ const colleges = [
     totalReviews: 750,
     established: 1941,
     description: 'DTU (formerly Delhi College of Engineering) is a leading state technical university in Delhi. Known for strong industry connections, competitive placements, and research output. A top choice for students seeking quality engineering education at lower costs.',
-    imageUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800',
+    imageUrl: 'https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?w=800',
     accreditation: 'NAAC A',
     website: 'https://dtu.ac.in',
     examAccepted: ['JEE Main'],
