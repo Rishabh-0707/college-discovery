@@ -36,18 +36,20 @@ npm install
 ```
 
 ### 3. Environment Setup
-Create a `.env` file in the root directory and add the following variables:
-```env
-DATABASE_URL="postgresql://username:password@your-db-host/database?sslmode=require"
-NEXTAUTH_SECRET="your-secure-random-string"
-NEXTAUTH_URL="http://localhost:3000"
+Copy the provided `.env.example` file to create your own `.env` file:
+```bash
+cp .env.example .env
 ```
+Update `.env` with your actual values:
+- `DATABASE_URL`: Your PostgreSQL connection string (must include `sslmode=require` for production)
+- `AUTH_SECRET`: A secure random string (generate with `openssl rand -hex 32`)
+- `AUTH_URL`: Your application URL (e.g., `http://localhost:3000` for local dev)
 
 ### 4. Database Setup
-Push the Prisma schema to your database and seed it with the initial college data:
+The repository includes a convenience script to seed the database with initial college data:
 ```bash
 npx prisma db push
-npm run seed
+npm run db:seed
 ```
 
 ### 5. Run the Development Server
@@ -58,11 +60,21 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the a
 
 ## 📦 Deployment (Render)
 
-This application is optimized for deployment on Render.
-1. Connect this repository to a new Render **Web Service**.
-2. Add your `DATABASE_URL`, `NEXTAUTH_SECRET`, and `NEXTAUTH_URL` environment variables.
-3. Set the Build Command: `npm install && npx prisma generate && npx prisma db push && npm run build`
-4. Set the Start Command: `npm run start`
+This application is fully optimized for production deployment on Render. The repository includes an Infrastructure-as-Code configuration (`render.yaml`) and proper build scripts.
+
+### Steps to Deploy:
+1. Go to **Render** and create a new **Web Service**.
+2. Connect your GitHub repository.
+3. Configure the service:
+   - **Environment:** `Node`
+   - **Build Command:** `npm install --include=dev && npm run build:prod`
+   - **Start Command:** `npm start`
+4. Add the following **Environment Variables** in the Render dashboard:
+   - `DATABASE_URL` (Your production PostgreSQL URL)
+   - `AUTH_SECRET` (A 64-character random hex string)
+   - `AUTH_URL` (Your Render deployment URL, e.g., `https://your-app-name.onrender.com`)
+   - `NODE_ENV` set to `production`
+5. **Deploy!** The `build:prod` script automatically generates the Prisma client, pushes schema updates, and builds the Next.js app.
 
 ---
 *Built with precision for the modern student.*
