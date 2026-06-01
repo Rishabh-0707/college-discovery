@@ -75,7 +75,7 @@ export default function ComparePage() {
   if (loading) return <div className="text-center py-32 font-serif text-2xl text-slate-500">Loading comparison data...</div>;
 
   return (
-    <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 py-12">
+    <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 pt-36 lg:pt-40 pb-12">
       {/* Back Button */}
       <button
         onClick={() => router.back()}

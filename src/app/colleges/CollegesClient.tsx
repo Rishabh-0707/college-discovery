@@ -172,12 +172,12 @@ export function CollegesClient({ initialData }: { initialData: CollegesResponse 
 
   return (
     <div className="min-h-screen bg-[#F8F8FA]">
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 pt-28 pb-32">
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 pt-36 lg:pt-40 pb-32">
         <div className="flex gap-8">
 
           {/* ═══════════════ SIDEBAR (Desktop) ═══════════════ */}
           <aside className="hidden lg:flex flex-col w-60 xl:w-64 flex-shrink-0">
-            <div className="sticky top-28 bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+            <div className="sticky top-36 lg:top-40 bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
               <div className="flex items-center gap-2 mb-5 px-1">
                 <Filter className="h-4 w-4 text-slate-400" />
                 <h2 className="font-bold text-slate-900 text-base">Filters</h2>

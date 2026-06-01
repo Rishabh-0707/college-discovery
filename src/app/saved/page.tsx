@@ -43,7 +43,7 @@ export default async function SavedCollegesPage() {
   });
 
   return (
-    <div className="mx-auto max-w-7xl px-4 pt-32 pb-32 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 pt-36 lg:pt-40 pb-32 sm:px-6 lg:px-8">
       {/* Back Button */}
       <Link
         href="/colleges"
