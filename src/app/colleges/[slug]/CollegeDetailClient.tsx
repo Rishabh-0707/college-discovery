@@ -45,7 +45,7 @@ export default function CollegeDetailClient({ college, isSaved: initialSaved }: 
         {college.imageUrl ? (
           <Image src={college.imageUrl} alt={college.name} fill priority className="object-cover opacity-60" />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 to-purple-900" />
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
         
@@ -92,7 +92,7 @@ export default function CollegeDetailClient({ college, isSaved: initialSaved }: 
                   onClick={handleSaveToggle}
                   className={`flex h-14 w-14 items-center justify-center rounded-xl backdrop-blur-md transition-all ${
                     isSaved 
-                      ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30' 
+                      ? 'bg-[#E81A2D] text-white shadow-lg shadow-red-600/30' 
                       : 'bg-white/10 text-white hover:bg-white/20 border border-white/20'
                   }`}
                   title={isSaved ? "Saved" : "Save College"}
@@ -115,7 +115,7 @@ export default function CollegeDetailClient({ college, isSaved: initialSaved }: 
                 onClick={() => setActiveTab(tab as any)}
                 className={`whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium capitalize transition-colors ${
                   activeTab === tab
-                    ? 'border-indigo-600 text-indigo-600'
+                    ? 'border-[#E81A2D] text-[#E81A2D]'
                     : 'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700'
                 }`}
               >
@@ -141,7 +141,7 @@ export default function CollegeDetailClient({ college, isSaved: initialSaved }: 
                 <h3 className="text-lg font-bold text-slate-900 mt-8 mb-4">Exams Accepted</h3>
                 <div className="flex flex-wrap gap-2">
                   {college.examAccepted.map((exam) => (
-                    <span key={exam} className="inline-flex items-center rounded-lg bg-indigo-50 px-3 py-1.5 text-sm font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
+                    <span key={exam} className="inline-flex items-center rounded-lg bg-red-50 px-3 py-1.5 text-sm font-medium text-[#E81A2D] ring-1 ring-inset ring-red-200">
                       {exam}
                     </span>
                   ))}
@@ -152,14 +152,14 @@ export default function CollegeDetailClient({ college, isSaved: initialSaved }: 
             {activeTab === 'courses' && (
               <section className="space-y-4 animate-fade-in">
                 {college.courses.map((course) => (
-                  <div key={course.id} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200/60 hover:border-indigo-200 transition-colors">
+                  <div key={course.id} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200/60 hover:border-red-200 transition-colors">
                     <div className="flex justify-between items-start">
                       <div>
                         <h3 className="text-xl font-bold text-slate-900">{course.name}</h3>
                         <p className="text-slate-500 font-medium mt-1">{course.degree} • {course.duration} Years</p>
                       </div>
                       <div className="text-right">
-                        <span className="block text-2xl font-bold text-indigo-600">{formatFees(course.feesPerYear)}</span>
+                        <span className="block text-2xl font-bold text-[#E81A2D]">{formatFees(course.feesPerYear)}</span>
                         <span className="text-xs text-slate-400 uppercase tracking-wide">Per Year</span>
                       </div>
                     </div>
@@ -182,17 +182,17 @@ export default function CollegeDetailClient({ college, isSaved: initialSaved }: 
                         <p className="text-emerald-800 text-sm font-medium mb-1">Highest Package</p>
                         <p className="text-2xl font-bold text-emerald-600">{formatPackage(placement.highestPackage)}</p>
                       </div>
-                      <div className="bg-indigo-50 rounded-xl p-4 border border-indigo-100">
-                        <p className="text-indigo-800 text-sm font-medium mb-1">Average Package</p>
-                        <p className="text-2xl font-bold text-indigo-600">{formatPackage(placement.avgPackage)}</p>
+                      <div className="bg-red-50 rounded-xl p-4 border border-red-100">
+                        <p className="text-slate-700 text-sm font-medium mb-1">Average Package</p>
+                        <p className="text-2xl font-bold text-[#E81A2D]">{formatPackage(placement.avgPackage)}</p>
                       </div>
-                      <div className="bg-purple-50 rounded-xl p-4 border border-purple-100">
-                        <p className="text-purple-800 text-sm font-medium mb-1">Median Package</p>
-                        <p className="text-2xl font-bold text-purple-600">{formatPackage(placement.medianPackage)}</p>
+                      <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                        <p className="text-slate-700 text-sm font-medium mb-1">Median Package</p>
+                        <p className="text-2xl font-bold text-slate-700">{formatPackage(placement.medianPackage)}</p>
                       </div>
-                      <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
-                        <p className="text-blue-800 text-sm font-medium mb-1">Placement Rate</p>
-                        <p className="text-2xl font-bold text-blue-600">{placement.placementRate}%</p>
+                      <div className="bg-slate-100 rounded-xl p-4 border border-slate-200">
+                        <p className="text-slate-700 text-sm font-medium mb-1">Placement Rate</p>
+                        <p className="text-2xl font-bold text-slate-800">{placement.placementRate}%</p>
                       </div>
                     </div>
 
@@ -217,7 +217,7 @@ export default function CollegeDetailClient({ college, isSaved: initialSaved }: 
                   <div key={review.id} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200/60">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#E81A2D] to-red-800 flex items-center justify-center text-white font-bold">
                           {review.user.name.charAt(0)}
                         </div>
                         <div>
@@ -231,7 +231,7 @@ export default function CollegeDetailClient({ college, isSaved: initialSaved }: 
                     </div>
                     <h4 className="font-bold text-slate-800 mb-2">{review.title}</h4>
                     <p className="text-slate-600 text-sm leading-relaxed mb-4">{review.content}</p>
-                    <span className="inline-block text-xs font-medium uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-1 rounded">
+                    <span className="inline-block text-xs font-medium uppercase tracking-wider text-[#E81A2D] bg-red-50 px-2 py-1 rounded">
                       {review.category}
                     </span>
                   </div>
@@ -263,7 +263,7 @@ export default function CollegeDetailClient({ college, isSaved: initialSaved }: 
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-slate-500">Highest Package</span>
-                  <span className="font-medium text-slate-900 text-indigo-600">
+                  <span className="font-medium text-[#E81A2D]">
                     {college.placements[0] ? formatPackage(college.placements[0].highestPackage) : 'N/A'}
                   </span>
                 </div>

@@ -17,7 +17,7 @@ const typeColors: Record<string, string> = {
   IIT: 'bg-[#E81A2D] text-white',
   NIT: 'bg-slate-800 text-white',
   IIIT: 'bg-slate-700 text-white',
-  BITS: 'bg-indigo-900 text-white',
+  BITS: 'bg-slate-900 text-white',
   GOVERNMENT: 'bg-slate-100 text-slate-700',
   PRIVATE: 'bg-slate-50 text-slate-600 border border-slate-200',
   DEEMED: 'bg-slate-50 text-slate-600 border border-slate-200',

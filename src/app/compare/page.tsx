@@ -182,7 +182,7 @@ export default function ComparePage() {
               {data.map((college) => (
                 <td key={college.id} className="p-4">
                   {college.placements[0] ? (
-                    <span className="font-bold text-indigo-600">{formatPackage(college.placements[0].highestPackage)}</span>
+                    <span className="font-bold text-[#E81A2D]">{formatPackage(college.placements[0].highestPackage)}</span>
                   ) : <span className="text-slate-400">N/A</span>}
                 </td>
               ))}
