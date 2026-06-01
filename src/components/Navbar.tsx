@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useCompareStore } from '@/store/useCompareStore';
-import { GitCompareArrows, Bookmark, Menu, X, Compass, LogIn, LogOut } from 'lucide-react';
+import { GitCompareArrows, Bookmark, Menu, X, Compass, LogIn, LogOut, Landmark } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function Navbar() {
@@ -23,10 +23,26 @@ export default function Navbar() {
       {/* Top Logo - Clean and minimal */}
       <header className="fixed top-0 left-0 w-full z-40 p-6 md:p-8 pointer-events-none">
         <div className="max-w-[1400px] mx-auto flex justify-between items-center">
-          <Link href="/" className="pointer-events-auto flex items-center bg-white/70 backdrop-blur-2xl px-8 py-4 rounded-full border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.05)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.08)] hover:scale-[1.02] transition-all duration-500">
-            <span className="font-serif text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
-              College<span className="text-[#E81A2D]">Q</span>
-            </span>
+          <Link href="/" className="pointer-events-auto flex items-center gap-4 bg-white/70 backdrop-blur-2xl px-6 md:px-8 py-3 md:py-4 rounded-full border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.05)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.08)] hover:scale-[1.02] transition-all duration-500">
+            <div className="flex items-center gap-3">
+              {/* Logo Icon */}
+              <div className="relative flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full border-[2px] md:border-[2.5px] border-[#0A1A3A] shrink-0 bg-white">
+                <Landmark className="w-5 h-5 md:w-6 md:h-6 text-[#0A1A3A] stroke-[2.5]" />
+                <div className="absolute -bottom-1 -right-0.5 text-[#E81A2D] drop-shadow-sm">
+                   <svg width="12" height="16" viewBox="0 0 10 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="w-3 h-4 md:w-3.5 md:h-5">
+                     <path d="M0 0H10V14L5 11L0 14V0Z" />
+                   </svg>
+                </div>
+              </div>
+              
+              {/* Separator */}
+              <div className="w-[1.5px] h-8 md:h-10 bg-slate-200" />
+              
+              {/* Text */}
+              <span className="font-serif text-3xl md:text-4xl font-medium text-[#0A1A3A] tracking-tight leading-none mt-1">
+                college<span className="text-[#E81A2D]">Q</span>
+              </span>
+            </div>
           </Link>
 
           {/* Mobile Toggle Button */}

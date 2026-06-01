@@ -149,7 +149,7 @@ export default function AIChatbot() {
                 <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-emerald-400 border border-slate-900 animate-ping"></span>
               </div>
               <div>
-                <h3 className="font-serif text-sm font-bold tracking-wide">CollegeQ AI</h3>
+                <h3 className="font-serif text-sm font-bold tracking-wide">collegeQ AI</h3>
                 <span className="text-[10px] text-slate-400 tracking-wider font-medium uppercase">Active Assistant</span>
               </div>
             </div>

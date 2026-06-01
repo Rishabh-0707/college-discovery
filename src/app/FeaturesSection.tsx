@@ -22,7 +22,7 @@ export default function FeaturesSection() {
         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
         className="mb-12 px-6 lg:px-8 text-center"
       >
-        <h2 className="font-serif text-3xl md:text-4xl font-medium text-slate-900">Why Choose CollegeQ</h2>
+        <h2 className="font-serif text-3xl md:text-4xl font-medium text-slate-900">Why Choose collegeQ</h2>
         <div className="h-1 w-12 bg-[#E81A2D] mx-auto mt-4"></div>
       </motion.div>
 
